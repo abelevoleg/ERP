@@ -1,8 +1,8 @@
 package org.example;
 
 import java.net.URL;
-import java.util.Date;
-import java.util.ResourceBundle;
+import java.util.*;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,7 +19,10 @@ public class FXMLController implements Initializable {
     
     @FXML
     private void btnClickAction(ActionEvent event) {
-        Order order = new Order(new Date(), 1122, 1.5, "покраска");
+        HashMap<Material, Double> orderMap = new HashMap<>();
+        orderMap.put(new Material("МДФ 19мм", "односторонний"), 1.5);
+        orderMap.put(new Material("МДФ 16мм", "односторонний"), 2.5);
+        Order order = new Order(new Date(), 1122, Order.StatusOfOrder.NEW, orderMap, "покраска");
         lblOut.setText(lblOut.getText() + "\n" + order.toString());
     }
     

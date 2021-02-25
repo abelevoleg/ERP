@@ -6,14 +6,14 @@ import java.util.HashMap;
 
 public class Order {
     private String date;
-    private int number;
+    private String number;
     private StatusOfOrder statusOfOrder;
     private HashMap<Material, Double> materialQuantity;
     private String description;
 
     SimpleDateFormat dateformatddMMyyyy = new SimpleDateFormat("dd.MM.yyyy");
 
-    public Order(Date date, int number, StatusOfOrder statusOfOrder, HashMap<Material, Double> materialQuantity, String description) {
+    public Order(Date date, String number, StatusOfOrder statusOfOrder, HashMap<Material, Double> materialQuantity, String description) {
         this.date = dateformatddMMyyyy.format(date);
         this.number = number;
         this.statusOfOrder = statusOfOrder;
@@ -42,6 +42,22 @@ public class Order {
         public String toString() {
             return "Статус заказа: " + status;
         }
+    }
+
+    public String getDate(){
+        return date;
+    }
+
+    public void setDate(Date date){
+        this.date = dateformatddMMyyyy.format(date);
+    }
+
+    public String getNumber(){
+        return number;
+    }
+
+    public void setNumber(String number){
+        this.number = number;
     }
 
     @Override

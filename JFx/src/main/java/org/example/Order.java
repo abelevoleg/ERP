@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.Material;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,12 +13,12 @@ public class Order {
     private HashMap<Material, Double> materialQuantity;
     private String description;
 
-    SimpleDateFormat dateformatddMMyyyy = new SimpleDateFormat("dd.MM.yyyy");
+//    SimpleDateFormat dateformatddMMyyyy = new SimpleDateFormat("dd.MM.yyyy");
 
-    public Order(Date date, String number, StatusOfOrder statusOfOrder, HashMap<Material, Double> materialQuantity, String description) {
-        this.date = dateformatddMMyyyy.format(date);
+    public Order(String date, String number, HashMap<Material, Double> materialQuantity, String description) {
+        this.date = date;
         this.number = number;
-        this.statusOfOrder = statusOfOrder;
+        this.statusOfOrder = StatusOfOrder.NEW;
         this.materialQuantity = materialQuantity;
         this.description = description;
     }
@@ -28,7 +30,7 @@ public class Order {
         PACKING("На упаковке"),
         FINISH ("Отгружен");
 
-        private String status;
+        String status;
 
         StatusOfOrder(String status) {
             this.status = status;
@@ -48,8 +50,8 @@ public class Order {
         return date;
     }
 
-    public void setDate(Date date){
-        this.date = dateformatddMMyyyy.format(date);
+    public void setDate(String date){
+        this.date = date;
     }
 
     public String getNumber(){
@@ -60,8 +62,12 @@ public class Order {
         this.number = number;
     }
 
+    public String getStatus(){
+        return statusOfOrder.getStatus();
+    }
+
     @Override
     public String toString() {
-        return String.format(date + "   " + number + "   " + statusOfOrder.getStatus() + "   " + materialQuantity + "   " + description);
+        return String.format(date + "   " + number + "   " + statusOfOrder.getStatus() + "   " + description);
     }
 }

@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
@@ -125,11 +124,11 @@
                      </textFill>
                   </Label>
                    <Label alignment="CENTER" font="$x11" layoutX="16.0" layoutY="137.0" style="&#10;" text="Описание" textAlignment="CENTER" textFill="$x21" wrapText="false" />
-                   <Button fx:id="mainButton" layoutX="13.0" layoutY="14.0" onAction="#btnClickAction" prefHeight="31.0" prefWidth="117.0" text="Новый заказ" textAlignment="CENTER" />
-                  <TextField id="newDate" fx:id="newDate" layoutX="179.0" layoutY="55.0" prefHeight="31.0" prefWidth="182.0" promptText="dd.mm.yyyy" />
-                  <TextField id="newNumber" fx:id="newNumber" layoutX="179.0" layoutY="95.0" prefHeight="31.0" prefWidth="182.0" />
-                  <TextField id="newDescription" fx:id="newDescription" layoutX="179.0" layoutY="135.0" prefHeight="31.0" prefWidth="182.0" />
-                  <Label alignment="CENTER" layoutX="89.0" layoutY="187.0" style="&#10;" text="Материал" textAlignment="CENTER" wrapText="false">
+                   <Button fx:id="newOrder" layoutX="13.0" layoutY="14.0" onAction="#newOrder" prefHeight="31.0" prefWidth="117.0" text="Новый заказ" textAlignment="CENTER" />
+                  <TextField id="newDate" fx:id="newDate" disable="true" layoutX="179.0" layoutY="55.0" prefHeight="31.0" prefWidth="182.0" promptText="dd.mm.yyyy" />
+                  <TextField id="newNumber" fx:id="newNumber" disable="true" layoutX="179.0" layoutY="95.0" prefHeight="31.0" prefWidth="182.0" />
+                  <TextField id="newDescription" fx:id="newDescription" disable="true" layoutX="179.0" layoutY="135.0" prefHeight="31.0" prefWidth="182.0" />
+                  <Label alignment="CENTER" layoutX="138.0" layoutY="187.0" style="&#10;" text="Материал" textAlignment="CENTER" wrapText="false">
                      <font>
                         <Font size="18.0" fx:id="x113" />
                      </font>
@@ -137,7 +136,7 @@
                         <Color blue="0.624" green="0.624" red="0.624" fx:id="x213" />
                      </textFill>
                   </Label>
-                  <Label alignment="CENTER" layoutX="16.0" layoutY="216.0" style="&#10;" text="Выберите материал" textAlignment="CENTER" wrapText="false">
+                  <Label alignment="CENTER" layoutX="17.0" layoutY="216.0" style="&#10;" text="Выберите материал" textAlignment="CENTER" wrapText="false">
                      <font>
                         <Font size="18.0" fx:id="x1131" />
                      </font>
@@ -145,12 +144,24 @@
                         <Color blue="0.624" green="0.624" red="0.624" fx:id="x2131" />
                      </textFill>
                   </Label>
-                  <MenuButton id="materialMenu" fx:id="materialMenu" cache="true" layoutX="224.0" layoutY="214.0" mnemonicParsing="true" mouseTransparent="true" scaleShape="false" text="материал" textAlignment="CENTER" wrapText="true">
-                    <items>
-                      <MenuItem mnemonicParsing="true" text="МДФ 16мм" />
-                      <MenuItem mnemonicParsing="true" text="МДФ 19мм" />
-                    </items>
-                  </MenuButton>
+                  <Button fx:id="saveOrder" disable="true" layoutX="140.0" layoutY="14.0" onAction="#saveOrder" prefHeight="31.0" prefWidth="117.0" text="Создать" textAlignment="CENTER" />
+                  <TextField id="newMaterial" fx:id="newMaterial" disable="true" layoutX="188.0" layoutY="214.0" prefHeight="31.0" prefWidth="182.0" />
+                  <Label alignment="CENTER" layoutX="17.0" layoutY="252.0" style="&#10;" text="Количество, м.кв." textAlignment="CENTER" wrapText="false">
+                     <font>
+                        <Font size="18.0" fx:id="x11311" />
+                     </font>
+                     <textFill>
+                        <Color blue="0.624" green="0.624" red="0.624" fx:id="x21311" />
+                     </textFill>
+                  </Label>
+                  <TextField id="newQuantity" fx:id="newQuantity" disable="true" layoutX="188.0" layoutY="250.0" prefHeight="31.0" prefWidth="82.0" />
+                  <Button fx:id="saveMaterial" disable="true" layoutX="279.0" layoutY="250.0" onAction="#saveMaterial" prefHeight="31.0" prefWidth="82.0" text="Ок" textAlignment="CENTER" />
+                   <TableView fx:id="tableMaterialNewOrder" disable="true" editable="true" layoutX="29.0" layoutY="291.0" prefHeight="116.0" prefWidth="314.0">
+                       <columns>
+                           <TableColumn fx:id="materialNewColumn" prefWidth="234.0" style="-fx-alignment: CENTER;" text="Материал" />
+                           <TableColumn fx:id="quantityNewColumn" prefWidth="79.0" style="-fx-alignment: CENTER;" text="м.кв." />
+                       </columns>
+                   </TableView>
                </children>
             </AnchorPane>
          </items>

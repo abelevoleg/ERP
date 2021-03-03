@@ -1,25 +1,23 @@
 package org.example;
 
-import org.example.Material;
+import javafx.collections.ObservableList;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 
 public class Order {
     private String date;
     private String number;
     private StatusOfOrder statusOfOrder;
-    private HashMap<Material, Double> materialQuantity;
+    private List<MaterialDataForOrder> materialList;
     private String description;
 
 //    SimpleDateFormat dateformatddMMyyyy = new SimpleDateFormat("dd.MM.yyyy");
 
-    public Order(String date, String number, HashMap<Material, Double> materialQuantity, String description) {
+    public Order(String date, String number, List<MaterialDataForOrder> materialList, String description) {
         this.date = date;
         this.number = number;
         this.statusOfOrder = StatusOfOrder.NEW;
-        this.materialQuantity = materialQuantity;
+        this.materialList = materialList;
         this.description = description;
     }
 
@@ -42,7 +40,7 @@ public class Order {
 
         @Override
         public String toString() {
-            return "Статус заказа: " + status;
+            return getStatus();
         }
     }
 
@@ -62,8 +60,32 @@ public class Order {
         this.number = number;
     }
 
-    public String getStatus(){
+    public String getDescription(){
+        return description;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    public StatusOfOrder getStatus(){
+        return statusOfOrder;
+    }
+
+    public String getStatusText(){
         return statusOfOrder.getStatus();
+    }
+
+    public void setStatusOfOrder(StatusOfOrder statusOfOrder){
+        this.statusOfOrder = statusOfOrder;
+    }
+
+    public List<MaterialDataForOrder> getMaterialList(){
+        return materialList;
+    }
+
+    public void setMaterialList(ObservableList<MaterialDataForOrder> materialList){
+        this.materialList = materialList;
     }
 
     @Override

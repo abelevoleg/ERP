@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
@@ -9,6 +12,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -79,13 +83,15 @@
 <!--               <content>-->
                   <AnchorPane prefHeight="692.0" prefWidth="372.0">
                      <children>
-                        <TableView fx:id="tableOrder" editable="true" layoutX="0.0" layoutY="0.0" onMouseClicked="#choiceOrder" prefHeight="692.0" prefWidth="372.0">
+                        <TableView fx:id="tableOrder" editable="true" layoutX="0.0" layoutY="34.0" onMouseClicked="#choiceOrder" prefHeight="658.0" prefWidth="372.0">
                           <columns>
-                            <TableColumn fx:id="dateOrderColumn" prefWidth="103.0" style="-fx-alignment: CENTER;" text="Срок сдачи" />
-                            <TableColumn fx:id="numberOrderColumn" prefWidth="117.0" style="-fx-alignment: CENTER;" text="Номер заказа" />
-                            <TableColumn fx:id="statusOrderColumn" prefWidth="152.0" style="-fx-alignment: CENTER;" text="Статус заказа" />
+                            <TableColumn fx:id="dateOrderColumn" prefWidth="103.0" sortable="false" style="-fx-alignment: CENTER;" text="Срок сдачи" />
+                            <TableColumn fx:id="numberOrderColumn" editable="false" prefWidth="117.0" sortable="false" style="-fx-alignment: CENTER;" text="Номер заказа" />
+                            <TableColumn fx:id="statusOrderColumn" prefWidth="152.0" sortable="false" style="-fx-alignment: CENTER;" text="Статус заказа" />
                           </columns>
                         </TableView>
+                  <TextField id="numberToFind" fx:id="numberToFind" layoutX="178.0" prefHeight="31.0" prefWidth="104.0" />
+                  <Button fx:id="findOrder" onAction="#findOrder" prefHeight="31.0" prefWidth="172.0" text="Найти заказ №" textAlignment="CENTER" />
                      </children>
                   </AnchorPane>
 <!--               </content>-->
@@ -130,14 +136,27 @@
                            </textFill>
                         </Label>
                         <ChoiceBox fx:id="status" layoutX="136.0" layoutY="131.0" prefHeight="31.0" prefWidth="182.0" />
-                         <TableView fx:id="tableMaterialOrder" editable="true" layoutX="14.0" layoutY="172.0" prefHeight="178.0" prefWidth="305.0">
+                         <TableView fx:id="tableMaterialOrder" editable="true" layoutX="14.0" layoutY="172.0" onKeyPressed="#deleteMaterial" prefHeight="178.0" prefWidth="305.0">
                              <columns>
-                                 <TableColumn fx:id="materialColumn" editable="true" onEditCommit="#changeMaterial" prefWidth="234.0" style="-fx-alignment: CENTER;" text="Материал" />
-                                 <TableColumn fx:id="quantityColumn" editable="true" onEditCommit="#changeQuantity" prefWidth="79.0" style="-fx-alignment: CENTER;" text="м.кв." />
+                                 <TableColumn fx:id="materialColumn" onEditCommit="#changeMaterial" prefWidth="234.0" style="-fx-alignment: CENTER;" text="Материал" />
+                                 <TableColumn fx:id="quantityColumn" onEditCommit="#changeQuantity" prefWidth="79.0" style="-fx-alignment: CENTER;" text="м.кв." />
                              </columns>
                          </TableView>
                         <Button fx:id="putOrder" disable="true" layoutX="9.0" layoutY="361.0" onAction="#putOrder" prefHeight="31.0" prefWidth="172.0" text="Сохранить изменения" textAlignment="CENTER" />
                         <Button fx:id="deleteOrder" disable="true" layoutX="9.0" layoutY="402.0" onAction="#deleteOrder" prefHeight="31.0" prefWidth="172.0" text="Удалить заказ" textAlignment="CENTER" />
+                        <Slider layoutX="319.0" orientation="VERTICAL" prefHeight="692.0" prefWidth="18.0" />
+                        <BarChart id="orderInWork" fx:id="orderInWork" alternativeRowFillVisible="false" barGap="10.0" categoryGap="5.0" layoutX="337.0" layoutY="13.0" prefHeight="426.0" prefWidth="408.0" title="Заказы в производстве">
+                          <xAxis>
+                            <CategoryAxis id="statusAxe" fx:id="statusAxe" side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis id="quantityAxe" fx:id="quantityAxe" side="LEFT" tickLabelGap="5.0" tickLength="5.0" upperBound="20.0">
+                                 <tickLabelFont>
+                                    <Font size="9.0" />
+                                 </tickLabelFont>
+                              </NumberAxis>
+                          </yAxis>
+                        </BarChart>
                      </children>
                   </AnchorPane>
                </content>
@@ -199,10 +218,10 @@
                   </Label>
                   <TextField id="newQuantity" fx:id="newQuantity" disable="true" layoutX="188.0" layoutY="250.0" prefHeight="31.0" prefWidth="82.0" />
                   <Button fx:id="saveMaterial" disable="true" layoutX="279.0" layoutY="250.0" onAction="#saveMaterial" prefHeight="31.0" prefWidth="82.0" text="Ок" textAlignment="CENTER" />
-                   <TableView fx:id="tableMaterialNewOrder" disable="true" editable="true" layoutX="29.0" layoutY="291.0" prefHeight="116.0" prefWidth="314.0">
+                   <TableView fx:id="tableMaterialNewOrder" disable="true" editable="true" layoutX="29.0" layoutY="291.0" onKeyPressed="#deleteNewMaterial" prefHeight="116.0" prefWidth="314.0">
                        <columns>
-                           <TableColumn fx:id="materialNewColumn" prefWidth="234.0" style="-fx-alignment: CENTER;" text="Материал" />
-                           <TableColumn fx:id="quantityNewColumn" prefWidth="79.0" style="-fx-alignment: CENTER;" text="м.кв." />
+                           <TableColumn fx:id="materialNewColumn" onEditCommit="#changeNewMaterial" prefWidth="234.0" style="-fx-alignment: CENTER;" text="Материал" />
+                           <TableColumn fx:id="quantityNewColumn" onEditCommit="#changeNewQuantity" prefWidth="79.0" style="-fx-alignment: CENTER;" text="м.кв." />
                        </columns>
                    </TableView>
                </children>

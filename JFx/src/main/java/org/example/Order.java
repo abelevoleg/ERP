@@ -2,16 +2,19 @@ package org.example;
 
 import javafx.collections.ObservableList;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
-public class Order {
+public class Order implements Comparable<Order>{
     private String date;
     private String number;
     private StatusOfOrder statusOfOrder;
     private List<MaterialDataForOrder> materialList;
     private String description;
 
-//    SimpleDateFormat dateformatddMMyyyy = new SimpleDateFormat("dd.MM.yyyy");
+    static SimpleDateFormat dateformatddMMyyyy = new SimpleDateFormat("dd.MM.yyyy");
 
     public Order(String date, String number, List<MaterialDataForOrder> materialList, String description) {
         this.date = date;
@@ -21,10 +24,23 @@ public class Order {
         this.description = description;
     }
 
+    @Override
+    public int compareTo(Order o) {
+        try {
+            Date dateFirst = dateformatddMMyyyy.parse(o.getDate());
+            Date dateSecond = dateformatddMMyyyy.parse(this.date);
+            if (dateFirst.before(dateSecond)) return 1;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     enum StatusOfOrder {
         NEW ("Не запущен"),
-        START ("Выдан в работу"),
-        PAINTING ("На шлифовке/покраска"),
+        START ("ЧПУ/раскрой"),
+        DRILL ("Присадка"),
+        PAINTING ("Шлифовка/покраска"),
         PACKING("На упаковке"),
         FINISH ("Отгружен");
 

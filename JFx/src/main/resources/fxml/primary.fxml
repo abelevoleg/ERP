@@ -132,11 +132,12 @@
                         <ChoiceBox fx:id="status" layoutX="136.0" layoutY="131.0" prefHeight="31.0" prefWidth="182.0" />
                          <TableView fx:id="tableMaterialOrder" editable="true" layoutX="14.0" layoutY="172.0" prefHeight="178.0" prefWidth="305.0">
                              <columns>
-                                 <TableColumn fx:id="materialColumn" prefWidth="234.0" style="-fx-alignment: CENTER;" text="Материал" />
-                                 <TableColumn fx:id="quantityColumn" prefWidth="79.0" style="-fx-alignment: CENTER;" text="м.кв." />
+                                 <TableColumn fx:id="materialColumn" editable="true" onEditCommit="#changeMaterial" prefWidth="234.0" style="-fx-alignment: CENTER;" text="Материал" />
+                                 <TableColumn fx:id="quantityColumn" editable="true" onEditCommit="#changeQuantity" prefWidth="79.0" style="-fx-alignment: CENTER;" text="м.кв." />
                              </columns>
                          </TableView>
-                        <Button fx:id="putOrder" layoutX="9.0" layoutY="361.0" disable="true" onAction="#putOrder" prefHeight="31.0" prefWidth="182.0" text="Сохранить изменения" textAlignment="CENTER" />
+                        <Button fx:id="putOrder" disable="true" layoutX="9.0" layoutY="361.0" onAction="#putOrder" prefHeight="31.0" prefWidth="172.0" text="Сохранить изменения" textAlignment="CENTER" />
+                        <Button fx:id="deleteOrder" disable="true" layoutX="9.0" layoutY="402.0" onAction="#deleteOrder" prefHeight="31.0" prefWidth="172.0" text="Удалить заказ" textAlignment="CENTER" />
                      </children>
                   </AnchorPane>
                </content>

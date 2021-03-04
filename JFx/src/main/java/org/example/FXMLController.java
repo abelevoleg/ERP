@@ -11,7 +11,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
+import javafx.util.converter.DoubleStringConverter;
 
 
 public class FXMLController implements Initializable {
@@ -71,8 +73,12 @@ public class FXMLController implements Initializable {
     private Button putOrder;
 
     @FXML
+    private Button deleteOrder;
+
+    @FXML
     private Button saveMaterial;
 
+    // поля ввода данных нового материала
     @FXML
     private TextField newDate;
 
@@ -88,6 +94,7 @@ public class FXMLController implements Initializable {
     @FXML
     private TextField newQuantity;
 
+    // поля данных просмотра и редактирования заказа
     @FXML
     private TextField date;
 
@@ -117,12 +124,16 @@ public class FXMLController implements Initializable {
         tableMaterialNewOrder.setDisable(false);
     }
 
+    // сохранение данных нового материала в таблице в новом заказе
     @FXML
     private void saveMaterial(ActionEvent event) {
         MaterialDataForOrder materialDataForOrder = new MaterialDataForOrder(newMaterial.getText(), Double.parseDouble(newQuantity.getText()));
         materialListForOrder.add(materialDataForOrder);
+        newMaterial.clear();
+        newQuantity.clear();
     }
 
+    // сохранение нового заказа в таблице заказов
     @FXML
     private void saveOrder(ActionEvent event) {
         List<MaterialDataForOrder> materialListForSaveOrder = new ArrayList<>();
@@ -147,6 +158,7 @@ public class FXMLController implements Initializable {
         tableMaterialNewOrder.setDisable(true);
     }
 
+    // выбор заказа в таблице заказов
     @FXML
     private void choiceOrder(MouseEvent event) {
         Order selectedOrder = tableOrder.getSelectionModel().getSelectedItem();
@@ -157,8 +169,22 @@ public class FXMLController implements Initializable {
         materialListInOrder.clear();
         materialListInOrder.addAll(selectedOrder.getMaterialList());
         putOrder.setDisable(false);
+        deleteOrder.setDisable(false);
     }
 
+    // изменение материала в таблице материалов выбранного заказа
+    @FXML
+    private void changeMaterial(TableColumn.CellEditEvent<MaterialDataForOrder, String> event) {
+        event.getTableView().getItems().get(event.getTablePosition().getRow()).setMaterialName(event.getNewValue());
+    }
+
+    // изменение количества материала в таблице материалов выбранного заказа
+    @FXML
+    private void changeQuantity(TableColumn.CellEditEvent<MaterialDataForOrder, Double> event) {
+        event.getTableView().getItems().get(event.getTablePosition().getRow()).setQuantity(event.getNewValue());
+    }
+
+    // сохранение измененного заказа
     @FXML
     private void putOrder(ActionEvent event) {
         List<MaterialDataForOrder> materialListForPutOrder = new ArrayList<>();
@@ -173,6 +199,21 @@ public class FXMLController implements Initializable {
         description.clear();
         status.setValue(null);
         putOrder.setDisable(true);
+        deleteOrder.setDisable(true);
+    }
+
+    // удаление заказа
+    @FXML
+    private void deleteOrder(ActionEvent event) {
+        int index = tableOrder.getSelectionModel().getFocusedIndex();
+        orderList.remove(index);
+        materialListInOrder.clear();
+        date.clear();
+        number.clear();
+        description.clear();
+        status.setValue(null);
+        putOrder.setDisable(true);
+        deleteOrder.setDisable(true);
     }
     
     @Override
@@ -183,14 +224,15 @@ public class FXMLController implements Initializable {
         statusOrderColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatusText()));
         tableOrder.setItems(orderList);
 
-        materialNewColumn.setCellValueFactory(new PropertyValueFactory<MaterialDataForOrder, String>("materialName"));
-        quantityNewColumn.setCellValueFactory(new PropertyValueFactory<MaterialDataForOrder, Double>("quantity"));
+        materialNewColumn.setCellValueFactory(new PropertyValueFactory<>("materialName"));
+        quantityNewColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         tableMaterialNewOrder.setItems(materialListForOrder);
 
-        materialColumn.setCellValueFactory(new PropertyValueFactory<MaterialDataForOrder, String>("materialName"));
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<MaterialDataForOrder, Double>("quantity"));
+        materialColumn.setCellValueFactory(new PropertyValueFactory<>("materialName"));
+        materialColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        quantityColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         tableMaterialOrder.setItems(materialListInOrder);
-
         status.setItems(statusList);
     }
 

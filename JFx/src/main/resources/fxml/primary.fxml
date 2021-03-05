@@ -145,15 +145,15 @@
                         <Button fx:id="putOrder" disable="true" layoutX="9.0" layoutY="361.0" onAction="#putOrder" prefHeight="31.0" prefWidth="172.0" text="Сохранить изменения" textAlignment="CENTER" />
                         <Button fx:id="deleteOrder" disable="true" layoutX="9.0" layoutY="402.0" onAction="#deleteOrder" prefHeight="31.0" prefWidth="172.0" text="Удалить заказ" textAlignment="CENTER" />
                         <Slider layoutX="319.0" orientation="VERTICAL" prefHeight="692.0" prefWidth="18.0" />
-                        <BarChart id="orderInWork" fx:id="orderInWork" alternativeRowFillVisible="false" barGap="10.0" categoryGap="5.0" layoutX="337.0" layoutY="13.0" prefHeight="426.0" prefWidth="408.0" title="Заказы в производстве">
+                        <BarChart id="orderInWork" fx:id="orderInWork" alternativeRowFillVisible="false" barGap="0.0" categoryGap="35.0" layoutX="337.0" layoutY="13.0" prefHeight="426.0" prefWidth="408.0" title="Заказы в производстве">
                           <xAxis>
-                            <CategoryAxis id="statusAxe" fx:id="statusAxe" side="BOTTOM" />
+                            <CategoryAxis id="statusAxe" fx:id="statusAxe" side="BOTTOM" tickLabelRotation="0.0" />
                           </xAxis>
                           <yAxis>
                             <NumberAxis id="quantityAxe" fx:id="quantityAxe" side="LEFT" tickLabelGap="5.0" tickLength="5.0" upperBound="20.0">
-                                 <tickLabelFont>
-                                    <Font size="9.0" />
-                                 </tickLabelFont>
+<!--                                 <tickLabelFont>-->
+<!--                                    <Font size="9.0" />-->
+<!--                                 </tickLabelFont>-->
                               </NumberAxis>
                           </yAxis>
                         </BarChart>

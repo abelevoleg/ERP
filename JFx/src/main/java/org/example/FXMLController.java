@@ -29,9 +29,11 @@ public class FXMLController implements Initializable {
     private ObservableList<MaterialDataForOrder> materialListForOrder = FXCollections.observableArrayList();
     private ObservableList<MaterialDataForOrder> materialListInOrder = FXCollections.observableArrayList();
     private ObservableList<Order.StatusOfOrder> statusList = FXCollections.observableArrayList(List.of(Order.StatusOfOrder.values()));
+    private ObservableList<String> statusNames = FXCollections.observableArrayList();
+    private XYChart.Series<String, Integer> series = new XYChart.Series<>();
 
     @FXML
-    private BarChart<String, Number> orderInWork;
+    private BarChart<String, Integer> orderInWork;
 
     @FXML
     private CategoryAxis statusAxe;
@@ -299,6 +301,10 @@ public class FXMLController implements Initializable {
         Order changedOrder = new Order(date.getText(), number.getText(), materialListForPutOrder, description.getText());
         changedOrder.setStatusOfOrder(status.getValue());
         int index = tableOrder.getSelectionModel().getFocusedIndex();
+
+        if (changedOrder.getStatus() != orderList.get(index).getStatus()){
+            histogramUpdate(changedOrder, orderList.get(index));
+        }
         orderList.set(index, changedOrder);
         Collections.sort(orderList);
         materialListInOrder.clear();
@@ -327,7 +333,7 @@ public class FXMLController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//        initData();
+        initData();
         dateOrderColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("date"));
         numberOrderColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("number"));
         statusOrderColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatusText()));
@@ -344,15 +350,76 @@ public class FXMLController implements Initializable {
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         quantityColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         tableMaterialOrder.setItems(materialListInOrder);
-
         status.setItems(statusList);
 
-        String[] valuesStatus = Arrays.stream(Order.StatusOfOrder.values()).map( value -> value.getStatus()).toArray( String[]::new );
-        statusAxe.setCategories(FXCollections.observableArrayList(valuesStatus));
-        orderInWork = new BarChart<>(statusAxe, quantityAxe);
-        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
-        series1.getData().add(new XYChart.Data<>("Не выдан", 15.0));
-        orderInWork.getData().addAll(series1);
+        histogramInit();
+    }
+
+    private void histogramInit(){
+        String[] values = Arrays.stream(Order.StatusOfOrder.values()).map( value -> value.getStatus()).toArray( String[]::new );
+        String[] valuesStatus = Arrays.copyOfRange(values, 1, values.length - 1);
+        statusNames.addAll(Arrays.asList(valuesStatus));
+        statusAxe.setCategories(statusNames);
+
+        int startCount = 0;
+        int drillCount = 0;
+        int paintingCount = 0;
+        int packingCount = 0;
+        for (Order order : orderList){
+            switch (order.getStatus()){
+                case START:
+                    startCount++;
+                    break;
+                case DRILL:
+                    drillCount++;
+                    break;
+                case PAINTING:
+                    paintingCount++;
+                    break;
+                case PACKING:
+                    packingCount++;
+                    break;
+            }
+        }
+        series.getData().add(new XYChart.Data<>("ЧПУ/раскрой", startCount));
+        series.getData().add(new XYChart.Data<>("Присадка", drillCount));
+        series.getData().add(new XYChart.Data<>("Шлифовка/покраска", paintingCount));
+        series.getData().add(new XYChart.Data<>("На упаковке", packingCount));
+        orderInWork.getData().add(series);
+    }
+
+    private void histogramUpdate(Order changedOrder, Order selectedOrder){
+        switch (selectedOrder.getStatus()){
+            case NEW:
+                break;
+            case START:
+                series.getData().get(0).setYValue(series.getData().get(0).getYValue() - 1);
+                break;
+            case DRILL:
+                series.getData().get(1).setYValue(series.getData().get(1).getYValue() - 1);
+                break;
+            case PAINTING:
+                series.getData().get(2).setYValue(series.getData().get(2).getYValue() - 1);
+                break;
+            case PACKING:
+                series.getData().get(3).setYValue(series.getData().get(3).getYValue() - 1);
+                break;
+        }
+
+        switch (changedOrder.getStatus()){
+            case START:
+                series.getData().get(0).setYValue(series.getData().get(0).getYValue() + 1);
+                break;
+            case DRILL:
+                series.getData().get(1).setYValue(series.getData().get(1).getYValue() + 1);
+                break;
+            case PAINTING:
+                series.getData().get(2).setYValue(series.getData().get(2).getYValue() + 1);
+                break;
+            case PACKING:
+                series.getData().get(3).setYValue(series.getData().get(3).getYValue() + 1);
+                break;
+        }
     }
 
     private void initData() {
@@ -360,6 +427,11 @@ public class FXMLController implements Initializable {
         materialOrderList.add(new MaterialDataForOrder("МДФ 19мм", 1.5));
         materialOrderList.add(new MaterialDataForOrder("МДФ 16мм", 2.5));
         Order order = new Order("11.03.2021", "1122", materialOrderList, "покраска");
-        orderList.add(order);
+        Order order1 = new Order("12.03.2021", "1155", materialOrderList, "покраска");
+        Order order2 = new Order("10.03.2021", "99448", materialOrderList, "покраска");
+        Order order3 = new Order("17.03.2021", "1307", materialOrderList, "покраска");
+        Order order4 = new Order("15.03.2021", "1125", materialOrderList, "покраска");
+        orderList.addAll(order, order1, order2, order3, order4);
+        Collections.sort(orderList);
     }
 }

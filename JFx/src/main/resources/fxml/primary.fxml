@@ -12,7 +12,6 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -144,7 +143,6 @@
                          </TableView>
                         <Button fx:id="putOrder" disable="true" layoutX="9.0" layoutY="361.0" onAction="#putOrder" prefHeight="31.0" prefWidth="172.0" text="Сохранить изменения" textAlignment="CENTER" />
                         <Button fx:id="deleteOrder" disable="true" layoutX="9.0" layoutY="402.0" onAction="#deleteOrder" prefHeight="31.0" prefWidth="172.0" text="Удалить заказ" textAlignment="CENTER" />
-                        <Slider layoutX="319.0" orientation="VERTICAL" prefHeight="692.0" prefWidth="18.0" />
                         <BarChart id="orderInWork" fx:id="orderInWork" alternativeRowFillVisible="false" barGap="0.0" categoryGap="35.0" layoutX="337.0" layoutY="13.0" prefHeight="426.0" prefWidth="408.0" title="Заказы в производстве">
                           <xAxis>
                             <CategoryAxis id="statusAxe" fx:id="statusAxe" side="BOTTOM" tickLabelRotation="0.0" />
@@ -157,6 +155,40 @@
                               </NumberAxis>
                           </yAxis>
                         </BarChart>
+                        <Button fx:id="enterprise" disable="true" layoutX="167.0" layoutY="650.0" prefHeight="31.0" prefWidth="172.0" text="Производство" textAlignment="CENTER" />
+                        <Button fx:id="warehouse" layoutX="352.0" layoutY="650.0" onAction="#setWarehouseMode" prefHeight="31.0" prefWidth="172.0" text="Склад" textAlignment="CENTER" />
+                        <Label id="ncOrders" fx:id="ncOrders" alignment="TOP_CENTER" layoutX="384.0" layoutY="420.0" prefHeight="214.0" prefWidth="80.0" style="&#10;" textAlignment="CENTER" wrapText="false">
+                           <font>
+                              <Font size="18.0" fx:id="x11111" />
+                           </font>
+                           <textFill>
+                              <Color blue="0.255" green="0.69" red="0" fx:id="x21111" />
+                           </textFill>
+                        </Label>
+                        <Label id="drillOrders" fx:id="drillOrders" alignment="TOP_CENTER" layoutX="470.0" layoutY="420.0" prefHeight="214.0" prefWidth="80.0" style="&#10;" textAlignment="CENTER" wrapText="false">
+                           <font>
+                              <Font size="18.0" fx:id="x111111" />
+                           </font>
+                           <textFill>
+                              <Color blue="0.255" green="0.255" red="0.0" fx:id="x211111" />
+                           </textFill>
+                        </Label>
+                        <Label id="paintingOrders" fx:id="paintingOrders" alignment="TOP_CENTER" layoutX="557.0" layoutY="420.0" prefHeight="214.0" prefWidth="80.0" style="&#10;" textAlignment="CENTER" wrapText="false">
+                           <font>
+                              <Font size="18.0" fx:id="x1111111" />
+                           </font>
+                           <textFill>
+                              <Color blue="0.25" green="0.25" red="0.112" fx:id="x2111111" />
+                           </textFill>
+                        </Label>
+                        <Label id="packingOrders" fx:id="packingOrders" alignment="TOP_CENTER" layoutX="644.0" layoutY="420.0" prefHeight="214.0" prefWidth="80.0" style="&#10;" textAlignment="CENTER" wrapText="false">
+                           <font>
+                              <Font size="18.0" fx:id="x1111112" />
+                           </font>
+                           <textFill>
+                              <Color blue="0" green="1" red="0" fx:id="x2111112" />
+                           </textFill>
+                        </Label>
                      </children>
                   </AnchorPane>
                </content>

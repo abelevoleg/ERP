@@ -31,6 +31,10 @@ public class FXMLController implements Initializable {
     private ObservableList<Order.StatusOfOrder> statusList = FXCollections.observableArrayList(List.of(Order.StatusOfOrder.values()));
     private ObservableList<String> statusNames = FXCollections.observableArrayList();
     private XYChart.Series<String, Integer> series = new XYChart.Series<>();
+    private ArrayList<String> ncOrderNumbers = new ArrayList<>();
+    private ArrayList<String> drillOrderNumbers = new ArrayList<>();
+    private ArrayList<String> paintingOrderNumbers = new ArrayList<>();
+    private ArrayList<String> packingOrderNumbers = new ArrayList<>();
 
     @FXML
     private BarChart<String, Integer> orderInWork;
@@ -82,6 +86,12 @@ public class FXMLController implements Initializable {
     private TableColumn<MaterialDataForOrder, Double> quantityColumn;
 
     @FXML
+    private Button enterprise;
+
+    @FXML
+    private Button warehouse;
+
+    @FXML
     private Button saveOrder;
 
     @FXML
@@ -128,6 +138,18 @@ public class FXMLController implements Initializable {
 
     @FXML
     private ChoiceBox<Order.StatusOfOrder> status;
+
+    @FXML
+    private Label ncOrders;
+
+    @FXML
+    private Label drillOrders;
+
+    @FXML
+    private Label paintingOrders;
+
+    @FXML
+    private Label packingOrders;
 
 
     public FXMLController() {
@@ -321,6 +343,8 @@ public class FXMLController implements Initializable {
     @FXML
     private void deleteOrder(ActionEvent event) {
         int index = tableOrder.getSelectionModel().getFocusedIndex();
+        histogramUpdate(null, orderList.get(index));
+
         orderList.remove(index);
         materialListInOrder.clear();
         date.clear();
@@ -330,7 +354,119 @@ public class FXMLController implements Initializable {
         putOrder.setDisable(true);
         deleteOrder.setDisable(true);
     }
-    
+
+    // инициализация гистограммы
+    private void histogramInit(){
+        String[] values = Arrays.stream(Order.StatusOfOrder.values()).map( value -> value.getStatus()).toArray( String[]::new );
+        String[] valuesStatus = Arrays.copyOfRange(values, 1, values.length - 1);
+        statusNames.addAll(Arrays.asList(valuesStatus));
+        statusAxe.setCategories(statusNames);
+
+        int startCount = 0;
+        int drillCount = 0;
+        int paintingCount = 0;
+        int packingCount = 0;
+        for (Order order : orderList){
+            switch (order.getStatus()){
+                case NEW:
+                    break;
+                case START:
+                    startCount++;
+                    ncOrderNumbers.add(order.getNumber());
+                    break;
+                case DRILL:
+                    drillCount++;
+                    drillOrderNumbers.add(order.getNumber());
+                    break;
+                case PAINTING:
+                    paintingCount++;
+                    paintingOrderNumbers.add(order.getNumber());
+                    break;
+                case PACKING:
+                    packingCount++;
+                    packingOrderNumbers.add(order.getNumber());
+                    break;
+            }
+        }
+        series.getData().add(new XYChart.Data<>("ЧПУ/раскрой", startCount));
+        series.getData().add(new XYChart.Data<>("Присадка", drillCount));
+        series.getData().add(new XYChart.Data<>("Шлифовка/покраска", paintingCount));
+        series.getData().add(new XYChart.Data<>("На упаковке", packingCount));
+        orderInWork.getData().add(series);
+
+        setNumberToLabels();
+    }
+
+    // обновление гистограммы
+    private void histogramUpdate(Order changedOrder, Order selectedOrder){
+        switch (selectedOrder.getStatus()){
+            case NEW:
+                break;
+            case START:
+                series.getData().get(0).setYValue(series.getData().get(0).getYValue() - 1);
+                ncOrderNumbers.remove(selectedOrder.getNumber());
+                break;
+            case DRILL:
+                series.getData().get(1).setYValue(series.getData().get(1).getYValue() - 1);
+                drillOrderNumbers.remove(selectedOrder.getNumber());
+                break;
+            case PAINTING:
+                series.getData().get(2).setYValue(series.getData().get(2).getYValue() - 1);
+                paintingOrderNumbers.remove(selectedOrder.getNumber());
+                break;
+            case PACKING:
+                series.getData().get(3).setYValue(series.getData().get(3).getYValue() - 1);
+                packingOrderNumbers.remove(selectedOrder.getNumber());
+                break;
+        }
+
+        if (changedOrder != null) {
+            switch (changedOrder.getStatus()) {
+                case START:
+                    series.getData().get(0).setYValue(series.getData().get(0).getYValue() + 1);
+                    ncOrderNumbers.add(changedOrder.getNumber());
+                    break;
+                case DRILL:
+                    series.getData().get(1).setYValue(series.getData().get(1).getYValue() + 1);
+                    drillOrderNumbers.add(changedOrder.getNumber());
+                    break;
+                case PAINTING:
+                    series.getData().get(2).setYValue(series.getData().get(2).getYValue() + 1);
+                    paintingOrderNumbers.add(changedOrder.getNumber());
+                    break;
+                case PACKING:
+                    series.getData().get(3).setYValue(series.getData().get(3).getYValue() + 1);
+                    packingOrderNumbers.add(changedOrder.getNumber());
+                    break;
+            }
+        }
+        setNumberToLabels();
+    }
+
+    // установка в поля под гистограммой списка заказов
+    private void setNumberToLabels(){
+        String ncNumber = setTextOrderNumbers(ncOrderNumbers);
+        ncOrders.setText(ncNumber);
+        String drillNumber = setTextOrderNumbers(drillOrderNumbers);
+        drillOrders.setText(drillNumber);
+        String paintingNumber = setTextOrderNumbers(paintingOrderNumbers);
+        paintingOrders.setText(paintingNumber);
+        String packingNumber = setTextOrderNumbers(packingOrderNumbers);
+        packingOrders.setText(packingNumber);
+    }
+
+    // получение строки для установки в поля под гистограммой
+    private String setTextOrderNumbers(ArrayList<String> numberOrders){
+        String typeNumber = "";
+        for (String orderNumber : numberOrders) typeNumber = typeNumber + orderNumber + "\n";
+        return typeNumber;
+    }
+
+    // переключение в режим склада (таблица материалов)
+    @FXML
+    public void setWarehouseMode(ActionEvent actionEvent) {
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initData();
@@ -353,73 +489,6 @@ public class FXMLController implements Initializable {
         status.setItems(statusList);
 
         histogramInit();
-    }
-
-    private void histogramInit(){
-        String[] values = Arrays.stream(Order.StatusOfOrder.values()).map( value -> value.getStatus()).toArray( String[]::new );
-        String[] valuesStatus = Arrays.copyOfRange(values, 1, values.length - 1);
-        statusNames.addAll(Arrays.asList(valuesStatus));
-        statusAxe.setCategories(statusNames);
-
-        int startCount = 0;
-        int drillCount = 0;
-        int paintingCount = 0;
-        int packingCount = 0;
-        for (Order order : orderList){
-            switch (order.getStatus()){
-                case START:
-                    startCount++;
-                    break;
-                case DRILL:
-                    drillCount++;
-                    break;
-                case PAINTING:
-                    paintingCount++;
-                    break;
-                case PACKING:
-                    packingCount++;
-                    break;
-            }
-        }
-        series.getData().add(new XYChart.Data<>("ЧПУ/раскрой", startCount));
-        series.getData().add(new XYChart.Data<>("Присадка", drillCount));
-        series.getData().add(new XYChart.Data<>("Шлифовка/покраска", paintingCount));
-        series.getData().add(new XYChart.Data<>("На упаковке", packingCount));
-        orderInWork.getData().add(series);
-    }
-
-    private void histogramUpdate(Order changedOrder, Order selectedOrder){
-        switch (selectedOrder.getStatus()){
-            case NEW:
-                break;
-            case START:
-                series.getData().get(0).setYValue(series.getData().get(0).getYValue() - 1);
-                break;
-            case DRILL:
-                series.getData().get(1).setYValue(series.getData().get(1).getYValue() - 1);
-                break;
-            case PAINTING:
-                series.getData().get(2).setYValue(series.getData().get(2).getYValue() - 1);
-                break;
-            case PACKING:
-                series.getData().get(3).setYValue(series.getData().get(3).getYValue() - 1);
-                break;
-        }
-
-        switch (changedOrder.getStatus()){
-            case START:
-                series.getData().get(0).setYValue(series.getData().get(0).getYValue() + 1);
-                break;
-            case DRILL:
-                series.getData().get(1).setYValue(series.getData().get(1).getYValue() + 1);
-                break;
-            case PAINTING:
-                series.getData().get(2).setYValue(series.getData().get(2).getYValue() + 1);
-                break;
-            case PACKING:
-                series.getData().get(3).setYValue(series.getData().get(3).getYValue() + 1);
-                break;
-        }
     }
 
     private void initData() {

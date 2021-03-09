@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.*;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.*;
@@ -25,7 +26,6 @@ import javafx.util.converter.DoubleStringConverter;
 
 public class FXMLController implements Initializable {
     private ObservableList<Order> orderList = FXCollections.observableArrayList();
-    private ObservableList<Material> materialList = FXCollections.observableArrayList();
     private ObservableList<MaterialDataForOrder> materialListForOrder = FXCollections.observableArrayList();
     private ObservableList<MaterialDataForOrder> materialListInOrder = FXCollections.observableArrayList();
     private ObservableList<Order.StatusOfOrder> statusList = FXCollections.observableArrayList(List.of(Order.StatusOfOrder.values()));
@@ -36,6 +36,7 @@ public class FXMLController implements Initializable {
     private ArrayList<String> paintingOrderNumbers = new ArrayList<>();
     private ArrayList<String> packingOrderNumbers = new ArrayList<>();
 
+    // гистограмма заказов в работе
     @FXML
     private BarChart<String, Integer> orderInWork;
 
@@ -221,8 +222,7 @@ public class FXMLController implements Initializable {
             newDate.setText("Формат даты dd.mm.yyyy");
             return;
         }
-        List<MaterialDataForOrder> materialListForSaveOrder = new ArrayList<>();
-        materialListForSaveOrder.addAll(materialListForOrder);
+        List<MaterialDataForOrder> materialListForSaveOrder = new ArrayList<>(materialListForOrder);
         Order order = new Order(newDate.getText(), newNumber.getText(), materialListForSaveOrder, newDescription.getText());
         orderList.add(order);
         Collections.sort(orderList);
@@ -318,8 +318,7 @@ public class FXMLController implements Initializable {
             date.setStyle("-fx-text-inner-color:Red;");
             return;
         }
-        List<MaterialDataForOrder> materialListForPutOrder = new ArrayList<>();
-        materialListForPutOrder.addAll(materialListInOrder);
+        List<MaterialDataForOrder> materialListForPutOrder = new ArrayList<>(materialListInOrder);
         Order changedOrder = new Order(date.getText(), number.getText(), materialListForPutOrder, description.getText());
         changedOrder.setStatusOfOrder(status.getValue());
         int index = tableOrder.getSelectionModel().getFocusedIndex();
@@ -464,7 +463,37 @@ public class FXMLController implements Initializable {
 
     // переключение в режим склада (таблица материалов)
     @FXML
-    public void setWarehouseMode(ActionEvent actionEvent) {
+    public void setWarehouseMode(ActionEvent actionEvent) throws IOException {
+        MainApp.changeRoot("materialMode");
+    }
+
+    @FXML
+    void saveToFile(){
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream("C:\\Users\\Oleg\\Desktop\\save.ser");
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            ArrayList<Order> q1 = new ArrayList<>(orderList);
+            objectOutputStream.writeObject(q1);
+            objectOutputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void openFromFile(){
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream("C:\\Users\\Oleg\\Desktop\\save.ser");
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            ArrayList<Order> q2;
+            q2 = (ArrayList<Order>) objectInputStream.readObject();
+            orderList.addAll(q2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        histogramInit();
     }
 
     @Override
@@ -492,7 +521,7 @@ public class FXMLController implements Initializable {
     }
 
     private void initData() {
-        ObservableList<MaterialDataForOrder> materialOrderList = FXCollections.observableArrayList();
+        List<MaterialDataForOrder> materialOrderList = new ArrayList<>();
         materialOrderList.add(new MaterialDataForOrder("МДФ 19мм", 1.5));
         materialOrderList.add(new MaterialDataForOrder("МДФ 16мм", 2.5));
         Order order = new Order("11.03.2021", "1122", materialOrderList, "покраска");

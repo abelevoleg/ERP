@@ -157,36 +157,36 @@
                         </BarChart>
                         <Button fx:id="enterprise" disable="true" layoutX="167.0" layoutY="650.0" prefHeight="31.0" prefWidth="172.0" text="Производство" textAlignment="CENTER" />
                         <Button fx:id="warehouse" layoutX="352.0" layoutY="650.0" onAction="#setWarehouseMode" prefHeight="31.0" prefWidth="172.0" text="Склад" textAlignment="CENTER" />
-                        <Label id="ncOrders" fx:id="ncOrders" alignment="TOP_CENTER" layoutX="384.0" layoutY="420.0" prefHeight="214.0" prefWidth="80.0" style="&#10;" textAlignment="CENTER" wrapText="false">
+                        <Label id="ncOrders" fx:id="ncOrders" alignment="BOTTOM_CENTER" layoutX="384.0" layoutY="51.0" prefHeight="323.0" prefWidth="80.0" style="&#10;" textAlignment="CENTER" wrapText="false">
                            <font>
                               <Font size="18.0" fx:id="x11111" />
                            </font>
                            <textFill>
-                              <Color blue="0.255" green="0.69" red="0" fx:id="x21111" />
+<!--                              <Color blue="0.0" green="0.069" red="0.255" fx:id="x21111" />-->
                            </textFill>
                         </Label>
-                        <Label id="drillOrders" fx:id="drillOrders" alignment="TOP_CENTER" layoutX="470.0" layoutY="420.0" prefHeight="214.0" prefWidth="80.0" style="&#10;" textAlignment="CENTER" wrapText="false">
+                        <Label id="drillOrders" fx:id="drillOrders" alignment="BOTTOM_CENTER" layoutX="470.0" layoutY="51.0" prefHeight="323.0" prefWidth="80.0" style="&#10;" textAlignment="CENTER" wrapText="false">
                            <font>
                               <Font size="18.0" fx:id="x111111" />
                            </font>
                            <textFill>
-                              <Color blue="0.255" green="0.255" red="0.0" fx:id="x211111" />
+<!--                              <Color blue="0.0" green="0.255" red="0.255" fx:id="x211111" />-->
                            </textFill>
                         </Label>
-                        <Label id="paintingOrders" fx:id="paintingOrders" alignment="TOP_CENTER" layoutX="557.0" layoutY="420.0" prefHeight="214.0" prefWidth="80.0" style="&#10;" textAlignment="CENTER" wrapText="false">
+                        <Label id="paintingOrders" fx:id="paintingOrders" alignment="BOTTOM_CENTER" layoutX="557.0" layoutY="51.0" prefHeight="323.0" prefWidth="80.0" style="&#10;" textAlignment="CENTER" wrapText="false">
                            <font>
                               <Font size="18.0" fx:id="x1111111" />
                            </font>
                            <textFill>
-                              <Color blue="0.25" green="0.25" red="0.112" fx:id="x2111111" />
+<!--                              <Color blue="0.128" green="0.0" red="0.112" fx:id="x2111111" />-->
                            </textFill>
                         </Label>
-                        <Label id="packingOrders" fx:id="packingOrders" alignment="TOP_CENTER" layoutX="644.0" layoutY="420.0" prefHeight="214.0" prefWidth="80.0" style="&#10;" textAlignment="CENTER" wrapText="false">
+                        <Label id="packingOrders" fx:id="packingOrders" alignment="BOTTOM_CENTER" layoutX="644.0" layoutY="51.0" prefHeight="323.0" prefWidth="80.0" style="&#10;" textAlignment="CENTER" wrapText="false">
                            <font>
                               <Font size="18.0" fx:id="x1111112" />
                            </font>
                            <textFill>
-                              <Color blue="0" green="1" red="0" fx:id="x2111112" />
+<!--                              <Color blue="0" green="1" red="0" fx:id="x2111112" />-->
                            </textFill>
                         </Label>
                      </children>

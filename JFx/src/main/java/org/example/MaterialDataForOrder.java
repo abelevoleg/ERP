@@ -1,6 +1,8 @@
 package org.example;
 
-public class MaterialDataForOrder {
+import java.io.Serializable;
+
+public class MaterialDataForOrder implements Serializable {
     private String materialName;
     private Double quantity;
 

@@ -1,13 +1,13 @@
 package org.example;
 
-import javafx.collections.ObservableList;
-
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Order implements Comparable<Order>{
+public class Order implements Comparable<Order>, Serializable {
     private String date;
     private String number;
     private StatusOfOrder statusOfOrder;
@@ -22,6 +22,9 @@ public class Order implements Comparable<Order>{
         this.statusOfOrder = StatusOfOrder.NEW;
         this.materialList = materialList;
         this.description = description;
+    }
+
+    public Order(){
     }
 
     @Override
@@ -100,7 +103,7 @@ public class Order implements Comparable<Order>{
         return materialList;
     }
 
-    public void setMaterialList(ObservableList<MaterialDataForOrder> materialList){
+    public void setMaterialList(ArrayList<MaterialDataForOrder> materialList){
         this.materialList = materialList;
     }
 

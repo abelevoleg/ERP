@@ -6,10 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
@@ -17,6 +14,7 @@ import javafx.util.converter.DoubleStringConverter;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +24,7 @@ public class FXMLMaterialController implements Initializable {
     private ObservableList<Material> materialList = FXCollections.observableArrayList();
 
     @FXML
-    public TableView tableMaterial;
+    public TableView <Material> tableMaterial;
 
     @FXML
     public TableColumn nameMaterialColumn;
@@ -72,14 +70,48 @@ public class FXMLMaterialController implements Initializable {
 
     @FXML
     public void choiceMaterial(MouseEvent mouseEvent) {
+        Material selectedMaterial = tableMaterial.getSelectionModel().getSelectedItem();
+        name.setText(selectedMaterial.getName());
+        materialDescription.setText(selectedMaterial.getMaterialDescription());
+        quantity.setText(String.valueOf(selectedMaterial.getQuantity()));
+
+        putMaterial.setDisable(false);
+        deleteMaterial.setDisable(false);
     }
 
     @FXML
     public void putMaterial(ActionEvent actionEvent) {
+        try {
+            Integer.parseInt(quantity.getText());
+        } catch (NumberFormatException e) {
+            quantity.setStyle("-fx-text-inner-color:Red;");
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Количество листов должно быть целым числом!");
+            alert.showAndWait();
+            return;
+        }
+        Material changedMaterial = new Material(name.getText(), materialDescription.getText(), Integer.parseInt(quantity.getText()));
+        int index = tableMaterial.getSelectionModel().getFocusedIndex();
+
+        materialList.set(index, changedMaterial);
+        Collections.sort(materialList);
+        quantity.setStyle("-fx-text-inner-color:Black;");
+        name.clear();
+        materialDescription.clear();
+        quantity.clear();
+        putMaterial.setDisable(true);
+        deleteMaterial.setDisable(true);
     }
 
     @FXML
     public void deleteMaterial(ActionEvent actionEvent) {
+        int index = tableMaterial.getSelectionModel().getFocusedIndex();
+
+        materialList.remove(index);
+        name.clear();
+        materialDescription.clear();
+        quantity.clear();
+        putMaterial.setDisable(true);
+        deleteMaterial.setDisable(true);
     }
 
     @FXML
@@ -89,10 +121,35 @@ public class FXMLMaterialController implements Initializable {
 
     @FXML
     public void newMaterialInBase(ActionEvent actionEvent) {
+        newName.setDisable(false);
+        newMaterialDescription.setDisable(false);
+        newQuantityInBase.setDisable(false);
+        saveMaterialInBase.setDisable(false);
     }
 
     @FXML
     public void saveMaterialInBase(ActionEvent actionEvent) {
+        try {
+            Integer.parseInt(newQuantityInBase.getText());
+        } catch (NumberFormatException e) {
+            newQuantityInBase.setStyle("-fx-text-inner-color:Red;");
+            newQuantityInBase.setText("0");
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Количество листов должно быть целым числом!");
+            alert.showAndWait();
+            return;
+        }
+        Material material = new Material(newName.getText(), newMaterialDescription.getText(), Integer.parseInt(newQuantityInBase.getText()));
+        materialList.add(material);
+        Collections.sort(materialList);
+        newQuantityInBase.setStyle("-fx-text-inner-color:Black;");
+        newName.clear();
+        newMaterialDescription.clear();
+        newQuantityInBase.clear();
+
+        newName.setDisable(true);
+        newMaterialDescription.setDisable(true);
+        newQuantityInBase.setDisable(true);
+        saveMaterialInBase.setDisable(true);
     }
 
     @Override

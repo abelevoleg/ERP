@@ -58,7 +58,7 @@
     </MenuBar>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
       <children>
-        <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="-1.0" prefHeight="16.0" prefWidth="375.0" text="Материалы" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+        <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="-1.0" prefHeight="20.0" prefWidth="576.0" text="Материалы" textAlignment="CENTER" HBox.hgrow="ALWAYS">
           <font>
             <Font size="14.0" fx:id="x3" />
           </font>
@@ -66,7 +66,7 @@
             <Color blue="0.625" green="0.625" red="0.625" fx:id="x4" />
           </textFill>
         </Label>
-        <Label alignment="CENTER" contentDisplay="CENTER" font="$x3" maxWidth="-1.0" prefHeight="20.0" prefWidth="751.0" text="Данные материала" textFill="$x4" HBox.hgrow="NEVER" />
+        <Label alignment="CENTER" contentDisplay="CENTER" font="$x3" maxWidth="-1.0" prefHeight="20.0" prefWidth="577.0" text="Данные материала" textFill="$x4" HBox.hgrow="NEVER" />
       </children>
       <padding>
         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
@@ -74,13 +74,13 @@
     </HBox>
       <SplitPane dividerPositions="0.2506, 0.7506" prefHeight="654.0" prefWidth="1520.0">
          <items>
-                  <AnchorPane prefHeight="692.0" prefWidth="372.0">
+                  <AnchorPane prefHeight="692.0" prefWidth="572.0">
                      <children>
-                        <TableView fx:id="tableMaterial" editable="true" layoutX="0.0" layoutY="34.0" onMouseClicked="#choiceMaterial" prefHeight="658.0" prefWidth="372.0">
+                        <TableView fx:id="tableMaterial" editable="true" layoutX="0.0" layoutY="34.0" onMouseClicked="#choiceMaterial" prefHeight="658.0" prefWidth="522.0">
                           <columns>
-                            <TableColumn fx:id="nameMaterialColumn" prefWidth="103.0" sortable="false" style="-fx-alignment: CENTER;" text="Материал" />
-                            <TableColumn fx:id="descriptionMaterialColumn" editable="false" prefWidth="117.0" sortable="false" style="-fx-alignment: CENTER;" text="Описание" />
-                            <TableColumn fx:id="quantityMaterialColumn" prefWidth="152.0" sortable="false" style="-fx-alignment: CENTER;" text="Кол-во (листов)" />
+                            <TableColumn fx:id="nameMaterialColumn" prefWidth="240.0" sortable="false" style="-fx-alignment: CENTER;" text="Материал" />
+                            <TableColumn fx:id="descriptionMaterialColumn" editable="false" prefWidth="180.0" sortable="false" style="-fx-alignment: CENTER;" text="Описание" />
+                            <TableColumn fx:id="quantityMaterialColumn" prefWidth="107.0" sortable="false" style="-fx-alignment: CENTER;" text="Кол-во (листов)" />
                           </columns>
                         </TableView>
 <!--                  <TextField id="materialToFind" fx:id="numberToFind" layoutX="178.0" prefHeight="31.0" prefWidth="104.0" />-->
@@ -89,7 +89,7 @@
                   </AnchorPane>
             <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
                <content>
-                  <AnchorPane id="Content" cacheShape="false" centerShape="false" minHeight="-1.0" minWidth="-1.0" prefHeight="691.0" prefWidth="751.0" scaleShape="false">
+                  <AnchorPane id="Content" cacheShape="false" centerShape="false" minHeight="-1.0" minWidth="-1.0" prefHeight="691.0" prefWidth="624.0" scaleShape="false">
                      <children>
                         <Label alignment="CENTER" cacheShape="false" centerShape="false" focusTraversable="false" layoutX="14.0" layoutY="54.0" scaleShape="false" style="&#10;" text="Описание" textAlignment="CENTER" wrapText="false">
                            <font>
@@ -122,8 +122,8 @@
                         <Button fx:id="putMaterial" disable="true" layoutX="11.0" layoutY="129.0" onAction="#putMaterial" prefHeight="31.0" prefWidth="172.0" text="Сохранить изменения" textAlignment="CENTER" />
                         <Button fx:id="deleteMaterial" disable="true" layoutX="10.0" layoutY="167.0" onAction="#deleteMaterial" prefHeight="31.0" prefWidth="172.0" text="Удалить материал" textAlignment="CENTER" />
 
-                        <Button fx:id="enterpriseSet" layoutX="167.0" layoutY="650.0" onAction="#setEnterpriseMode" prefHeight="31.0" prefWidth="172.0" text="Производство" textAlignment="CENTER" />
-                        <Button fx:id="warehouse" disable="true" layoutX="352.0" layoutY="650.0" prefHeight="31.0" prefWidth="172.0" text="Склад" textAlignment="CENTER" />
+                        <Button fx:id="enterpriseSet" layoutX="17.0" layoutY="650.0" onAction="#setEnterpriseMode" prefHeight="31.0" prefWidth="172.0" text="Производство" textAlignment="CENTER" />
+                        <Button fx:id="warehouse" disable="true" layoutX="202.0" layoutY="650.0" prefHeight="31.0" prefWidth="172.0" text="Склад" textAlignment="CENTER" />
                      </children>
                   </AnchorPane>
                </content>
@@ -155,8 +155,8 @@
                      </textFill></Label>
                    <Button fx:id="newMaterialInBase" layoutX="13.0" layoutY="14.0" onAction="#newMaterialInBase" prefHeight="31.0" prefWidth="117.0" text="Новый материал" textAlignment="CENTER" />
                    <Button fx:id="saveMaterialInBase" disable="true" layoutX="140.0" layoutY="14.0" onAction="#saveMaterialInBase" prefHeight="31.0" prefWidth="117.0" text="Сохранить" textAlignment="CENTER" />
-                  <TextField id="newName" fx:id="newName" disable="true" layoutX="107.0" layoutY="55.0" prefHeight="31.0" prefWidth="254.0" />
-                  <TextField id="newMaterialDescription" fx:id="newMaterialDescription" disable="true" layoutX="107.0" layoutY="95.0" prefHeight="31.0" prefWidth="254.0" />
+                  <TextField id="newName" fx:id="newName" disable="true" layoutX="107.0" layoutY="55.0" prefHeight="31.0" prefWidth="247.0" />
+                  <TextField id="newMaterialDescription" fx:id="newMaterialDescription" disable="true" layoutX="107.0" layoutY="95.0" prefHeight="31.0" prefWidth="247.0" />
                   <TextField id="newQuantityInBase" fx:id="newQuantityInBase" disable="true" layoutX="188.0" layoutY="135.0" prefHeight="31.0" prefWidth="82.0" />
                </children>
             </AnchorPane>

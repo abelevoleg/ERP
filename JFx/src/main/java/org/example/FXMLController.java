@@ -177,6 +177,8 @@ public class FXMLController implements Initializable {
         } catch (Exception e) {
             newQuantity.setStyle("-fx-text-inner-color:Red;");
             newQuantity.setText("*.*");
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Количество материала должно быть числом!");
+            alert.showAndWait();
             return;
         }
         MaterialDataForOrder materialDataForOrder = new MaterialDataForOrder(newMaterial.getText(), Double.parseDouble(newQuantity.getText()));
@@ -198,6 +200,8 @@ public class FXMLController implements Initializable {
         try {
             event.getNewValue();
         } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Количество материала должно быть числом!");
+            alert.showAndWait();
             return;
         }
         event.getTableView().getItems().get(event.getTablePosition().getRow()).setQuantity(event.getNewValue());
@@ -220,6 +224,8 @@ public class FXMLController implements Initializable {
         } catch (ParseException e) {
             newDate.setStyle("-fx-text-inner-color:Red;");
             newDate.setText("Формат даты dd.mm.yyyy");
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Неверный формат даты!");
+            alert.showAndWait();
             return;
         }
         List<MaterialDataForOrder> materialListForSaveOrder = new ArrayList<>(materialListForOrder);
@@ -295,6 +301,8 @@ public class FXMLController implements Initializable {
         try {
             event.getNewValue();
         } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Количество материала должно быть числом!");
+            alert.showAndWait();
             return;
         }
         event.getTableView().getItems().get(event.getTablePosition().getRow()).setQuantity(event.getNewValue());
@@ -316,6 +324,8 @@ public class FXMLController implements Initializable {
             Order.dateformatddMMyyyy.parse(date.getText());
         } catch (ParseException e) {
             date.setStyle("-fx-text-inner-color:Red;");
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Неверный формат даты!");
+            alert.showAndWait();
             return;
         }
         List<MaterialDataForOrder> materialListForPutOrder = new ArrayList<>(materialListInOrder);

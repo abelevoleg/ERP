@@ -137,7 +137,7 @@
                         <ChoiceBox fx:id="status" layoutX="136.0" layoutY="131.0" prefHeight="31.0" prefWidth="182.0" />
                          <TableView fx:id="tableMaterialOrder" editable="true" layoutX="14.0" layoutY="172.0" onKeyPressed="#deleteMaterial" prefHeight="178.0" prefWidth="305.0">
                              <columns>
-                                 <TableColumn fx:id="materialColumn" onEditCommit="#changeMaterial" prefWidth="234.0" style="-fx-alignment: CENTER;" text="Материал" />
+                                 <TableColumn fx:id="materialColumn" editable="false" prefWidth="234.0" style="-fx-alignment: CENTER;" text="Материал" />
                                  <TableColumn fx:id="quantityColumn" onEditCommit="#changeQuantity" prefWidth="79.0" style="-fx-alignment: CENTER;" text="м.кв." />
                              </columns>
                          </TableView>
@@ -231,15 +231,6 @@
                         <Color blue="0.624" green="0.624" red="0.624" fx:id="x213" />
                      </textFill>
                   </Label>
-                  <Label alignment="CENTER" layoutX="17.0" layoutY="216.0" style="&#10;" text="Выберите материал" textAlignment="CENTER" wrapText="false">
-                     <font>
-                        <Font size="18.0" fx:id="x1131" />
-                     </font>
-                     <textFill>
-                        <Color blue="0.624" green="0.624" red="0.624" fx:id="x2131" />
-                     </textFill>
-                  </Label>
-                  <TextField id="newMaterial" fx:id="newMaterial" disable="true" layoutX="188.0" layoutY="214.0" prefHeight="31.0" prefWidth="182.0" />
                   <Label alignment="CENTER" layoutX="17.0" layoutY="252.0" style="&#10;" text="Количество, м.кв." textAlignment="CENTER" wrapText="false">
                      <font>
                         <Font size="18.0" fx:id="x11311" />
@@ -252,10 +243,12 @@
                   <Button fx:id="saveMaterial" disable="true" layoutX="279.0" layoutY="250.0" onAction="#saveMaterial" prefHeight="31.0" prefWidth="82.0" text="Ок" textAlignment="CENTER" />
                    <TableView fx:id="tableMaterialNewOrder" disable="true" editable="true" layoutX="29.0" layoutY="291.0" onKeyPressed="#deleteNewMaterial" prefHeight="116.0" prefWidth="314.0">
                        <columns>
-                           <TableColumn fx:id="materialNewColumn" onEditCommit="#changeNewMaterial" prefWidth="234.0" style="-fx-alignment: CENTER;" text="Материал" />
+                           <TableColumn fx:id="materialNewColumn" editable="false" prefWidth="234.0" style="-fx-alignment: CENTER;" text="Материал" />
                            <TableColumn fx:id="quantityNewColumn" onEditCommit="#changeNewQuantity" prefWidth="79.0" style="-fx-alignment: CENTER;" text="м.кв." />
                        </columns>
                    </TableView>
+                  <Button fx:id="choiceMaterialInOrder" disable="true" layoutX="17.0" layoutY="215.0" onAction="#choiceMaterialInOrder" prefHeight="31.0" prefWidth="82.0" text="Выбрать" textAlignment="CENTER" />
+                  <ChoiceBox fx:id="material" disable="true" layoutX="107.0" layoutY="215.0" prefHeight="31.0" prefWidth="254.0" />
                </children>
             </AnchorPane>
          </items>

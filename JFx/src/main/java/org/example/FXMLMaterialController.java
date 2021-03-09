@@ -1,6 +1,5 @@
 package org.example;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,68 +7,63 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
-import javafx.util.converter.DoubleStringConverter;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class FXMLMaterialController implements Initializable {
-    private ObservableList<Material> materialList = FXCollections.observableArrayList();
+    ObservableList<Material> materialList = FXCollections.observableArrayList();
 
     @FXML
-    public TableView <Material> tableMaterial;
+    private TableView <Material> tableMaterial;
 
     @FXML
-    public TableColumn nameMaterialColumn;
+    private TableColumn nameMaterialColumn;
 
     @FXML
-    public TableColumn descriptionMaterialColumn;
+    private TableColumn descriptionMaterialColumn;
 
     @FXML
-    public TableColumn quantityMaterialColumn;
+    private TableColumn quantityMaterialColumn;
 
     @FXML
-    public TextField materialDescription;
+    private TextField materialDescription;
 
     @FXML
-    public TextField name;
+    private TextField name;
 
     @FXML
-    public TextField quantity;
+    private TextField quantity;
 
     @FXML
-    public Button putMaterial;
+    private Button putMaterial;
 
     @FXML
-    public Button deleteMaterial;
+    private Button deleteMaterial;
 
     @FXML
-    public Button newMaterialInBase;
+    private Button newMaterialInBase;
 
     @FXML
-    public Button saveMaterialInBase;
+    private Button saveMaterialInBase;
 
     @FXML
-    public TextField newName;
+    private TextField newName;
 
     @FXML
-    public TextField newMaterialDescription;
+    private TextField newMaterialDescription;
 
     @FXML
-    public TextField newQuantityInBase;
+    private TextField newQuantityInBase;
 
     @FXML
-    public Button enterpriseSet;
+    private Button enterpriseSet;
 
     @FXML
-    public void choiceMaterial(MouseEvent mouseEvent) {
+    private void choiceMaterial(MouseEvent mouseEvent) {
         Material selectedMaterial = tableMaterial.getSelectionModel().getSelectedItem();
         name.setText(selectedMaterial.getName());
         materialDescription.setText(selectedMaterial.getMaterialDescription());
@@ -80,7 +74,7 @@ public class FXMLMaterialController implements Initializable {
     }
 
     @FXML
-    public void putMaterial(ActionEvent actionEvent) {
+    private void putMaterial(ActionEvent actionEvent) {
         try {
             Integer.parseInt(quantity.getText());
         } catch (NumberFormatException e) {
@@ -103,7 +97,7 @@ public class FXMLMaterialController implements Initializable {
     }
 
     @FXML
-    public void deleteMaterial(ActionEvent actionEvent) {
+    private void deleteMaterial(ActionEvent actionEvent) {
         int index = tableMaterial.getSelectionModel().getFocusedIndex();
 
         materialList.remove(index);
@@ -115,12 +109,12 @@ public class FXMLMaterialController implements Initializable {
     }
 
     @FXML
-    public void setEnterpriseMode(ActionEvent actionEvent) throws IOException {
+    private void setEnterpriseMode(ActionEvent actionEvent) throws IOException {
         MainApp.changeRoot("primary");
     }
 
     @FXML
-    public void newMaterialInBase(ActionEvent actionEvent) {
+    private void newMaterialInBase(ActionEvent actionEvent) {
         newName.setDisable(false);
         newMaterialDescription.setDisable(false);
         newQuantityInBase.setDisable(false);
@@ -128,7 +122,7 @@ public class FXMLMaterialController implements Initializable {
     }
 
     @FXML
-    public void saveMaterialInBase(ActionEvent actionEvent) {
+    private void saveMaterialInBase(ActionEvent actionEvent) {
         try {
             Integer.parseInt(newQuantityInBase.getText());
         } catch (NumberFormatException e) {
@@ -159,6 +153,8 @@ public class FXMLMaterialController implements Initializable {
         descriptionMaterialColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("materialDescription"));
         quantityMaterialColumn.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantity"));
         tableMaterial.setItems(materialList);
+
+        Context.getInstance().setFXMLController(this);
     }
 
     private void initData() {
@@ -170,4 +166,5 @@ public class FXMLMaterialController implements Initializable {
         materialList.addAll(material, material1, material2, material3, material4);
         Collections.sort(materialList);
     }
+
 }

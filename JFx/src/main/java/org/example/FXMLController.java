@@ -105,13 +105,16 @@ public class FXMLController implements Initializable {
     private Button deleteOrder;
 
     @FXML
+    private Button choiceMaterialInOrder;
+
+    @FXML
     private Button saveMaterial;
 
     // поле ввода номера заказа для поиска
     @FXML
     private TextField numberToFind;
 
-    // поля ввода данных нового материала
+    // поля ввода данных нового заказа
     @FXML
     private TextField newDate;
 
@@ -121,9 +124,7 @@ public class FXMLController implements Initializable {
     @FXML
     private TextField newDescription;
 
-    @FXML
-    private TextField newMaterial;
-
+    // поля ввода данных нового материала в новом заказе
     @FXML
     private TextField newQuantity;
 
@@ -141,6 +142,9 @@ public class FXMLController implements Initializable {
     private ChoiceBox<Order.StatusOfOrder> status;
 
     @FXML
+    public ChoiceBox<String> material;
+
+    @FXML
     private Label ncOrders;
 
     @FXML
@@ -152,21 +156,31 @@ public class FXMLController implements Initializable {
     @FXML
     private Label packingOrders;
 
-
-    public FXMLController() {
-    }
-
     // активация полей ввода при нажатии кнопки нового заказа
     @FXML
     private void newOrder(ActionEvent event) {
         newDate.setDisable(false);
         newNumber.setDisable(false);
         newDescription.setDisable(false);
-        newMaterial.setDisable(false);
+        choiceMaterialInOrder.setDisable(false);
         newQuantity.setDisable(false);
         saveOrder.setDisable(false);
         saveMaterial.setDisable(false);
         tableMaterialNewOrder.setDisable(false);
+    }
+
+    // выбор материала из базы
+    @FXML
+    private void choiceMaterialInOrder(ActionEvent actionEvent) throws IOException {
+        FXMLMaterialController cont = Context.getInstance().getFXMLMaterialController();
+        List<Material> materialListForOrder = FXCollections.observableArrayList();
+        ObservableList<String> materialNameForOrder = FXCollections.observableArrayList();
+        materialListForOrder.addAll(cont.materialList);
+        for (Material m : materialListForOrder){
+            materialNameForOrder.add(m.getName());
+        }
+        material.setItems(materialNameForOrder);
+        material.setDisable(false);
     }
 
     // сохранение данных нового материала в таблице в новом заказе
@@ -174,24 +188,19 @@ public class FXMLController implements Initializable {
     private void saveMaterial(ActionEvent event) {
         try {
             Double.parseDouble(newQuantity.getText());
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             newQuantity.setStyle("-fx-text-inner-color:Red;");
             newQuantity.setText("*.*");
             Alert alert = new Alert(Alert.AlertType.ERROR, "Количество материала должно быть числом!");
             alert.showAndWait();
             return;
         }
-        MaterialDataForOrder materialDataForOrder = new MaterialDataForOrder(newMaterial.getText(), Double.parseDouble(newQuantity.getText()));
+        MaterialDataForOrder materialDataForOrder = new MaterialDataForOrder(material.getValue(), Double.parseDouble(newQuantity.getText()));
         materialListForOrder.add(materialDataForOrder);
-        newMaterial.clear();
+        material.setValue(null);
+        material.setDisable(true);
         newQuantity.clear();
         newQuantity.setStyle("-fx-text-inner-color:Black;");
-    }
-
-    // изменение материала в таблице материалов нового заказа
-    @FXML
-    private void changeNewMaterial(TableColumn.CellEditEvent<MaterialDataForOrder, String> event) {
-        event.getTableView().getItems().get(event.getTablePosition().getRow()).setMaterialName(event.getNewValue());
     }
 
     // изменение количества материала в таблице материалов нового заказа
@@ -236,7 +245,7 @@ public class FXMLController implements Initializable {
         newDate.clear();
         newNumber.clear();
         newDescription.clear();
-        newMaterial.clear();
+        material.setValue(null);
         newQuantity.clear();
 
         materialListForOrder.clear();
@@ -244,7 +253,8 @@ public class FXMLController implements Initializable {
         newDate.setDisable(true);
         newNumber.setDisable(true);
         newDescription.setDisable(true);
-        newMaterial.setDisable(true);
+        choiceMaterialInOrder.setDisable(true);
+        material.setDisable(true);
         newQuantity.setDisable(true);
         saveOrder.setDisable(true);
         saveMaterial.setDisable(true);
@@ -289,11 +299,11 @@ public class FXMLController implements Initializable {
         numberToFind.setText(findNumber + " не найден");
     }
 
-    // изменение материала в таблице материалов выбранного заказа
-    @FXML
-    private void changeMaterial(TableColumn.CellEditEvent<MaterialDataForOrder, String> event) {
-        event.getTableView().getItems().get(event.getTablePosition().getRow()).setMaterialName(event.getNewValue());
-    }
+//    // изменение материала в таблице материалов выбранного заказа
+//    @FXML
+//    private void changeMaterial(TableColumn.CellEditEvent<MaterialDataForOrder, String> event) {
+//        event.getTableView().getItems().get(event.getTablePosition().getRow()).setMaterialName(event.getNewValue());
+//    }
 
     // изменение количества материала в таблице материалов выбранного заказа
     @FXML
@@ -473,7 +483,7 @@ public class FXMLController implements Initializable {
 
     // переключение в режим склада (таблица материалов)
     @FXML
-    public void setWarehouseMode(ActionEvent actionEvent) throws IOException {
+    private void setWarehouseMode(ActionEvent actionEvent) throws IOException {
         MainApp.changeRoot("materialMode");
     }
 
@@ -542,4 +552,5 @@ public class FXMLController implements Initializable {
         orderList.addAll(order, order1, order2, order3, order4);
         Collections.sort(orderList);
     }
+
 }

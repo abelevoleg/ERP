@@ -36,6 +36,9 @@ public class FXMLController implements Initializable {
     private ArrayList<String> paintingOrderNumbers = new ArrayList<>();
     private ArrayList<String> packingOrderNumbers = new ArrayList<>();
 
+    // площадь листа материала (стандартный размер 2800х2070мм)
+    private static final double listArea = 5.796;
+
     // гистограмма заказов в работе
     @FXML
     private BarChart<String, Integer> orderInWork;
@@ -232,7 +235,7 @@ public class FXMLController implements Initializable {
             Order.dateformatddMMyyyy.parse(newDate.getText());
         } catch (ParseException e) {
             newDate.setStyle("-fx-text-inner-color:Red;");
-            newDate.setText("Формат даты dd.mm.yyyy");
+            newDate.setPromptText("dd.mm.yyyy");
             Alert alert = new Alert(Alert.AlertType.ERROR, "Неверный формат даты!");
             alert.showAndWait();
             return;
@@ -344,8 +347,46 @@ public class FXMLController implements Initializable {
         int index = tableOrder.getSelectionModel().getFocusedIndex();
 
         if (changedOrder.getStatus() != orderList.get(index).getStatus()){
+            if (orderList.get(index).getStatus() == Order.StatusOfOrder.NEW){
+                FXMLMaterialController cont = Context.getInstance().getFXMLMaterialController();
+//                List<Material> materialList = FXCollections.observableArrayList();
+//                materialList.addAll(cont.materialList);
+                for (MaterialDataForOrder materialData : materialListForPutOrder){
+                    for (Material m : cont.materialList){
+                        if (materialData.getMaterialName().equals(m.getName())){
+                            int materialQuantity = m.getQuantity() - (int) (materialData.getQuantity() / listArea + 0.75);
+                            if (materialQuantity < 0){
+                                Alert alert = new Alert(Alert.AlertType.ERROR, "Нет материала! Невозможно выдать заказ в работу!");
+                                alert.showAndWait();
+                                return;
+                            }
+                            m.setQuantity(materialQuantity);
+                            cont.tableMaterial.refresh();
+                            Context.getInstance().setFXMLMaterialController(cont);
+                        }
+                    }
+                }
+            } else if (changedOrder.getStatus() == Order.StatusOfOrder.NEW){
+                FXMLMaterialController cont = Context.getInstance().getFXMLMaterialController();
+                for (MaterialDataForOrder materialData : materialListForPutOrder){
+                    for (Material m : cont.materialList){
+                        if (materialData.getMaterialName().equals(m.getName())){
+                            int materialQuantity = m.getQuantity() + (int) (materialData.getQuantity() / listArea + 0.75);
+                            if (materialQuantity < 0){
+                                Alert alert = new Alert(Alert.AlertType.ERROR, "Нет материала! Невозможно выдать заказ в работу!");
+                                alert.showAndWait();
+                                return;
+                            }
+                            m.setQuantity(materialQuantity);
+                            cont.tableMaterial.refresh();
+                            Context.getInstance().setFXMLMaterialController(cont);
+                        }
+                    }
+                }
+            }
             histogramUpdate(changedOrder, orderList.get(index));
         }
+
         orderList.set(index, changedOrder);
         Collections.sort(orderList);
         materialListInOrder.clear();
@@ -542,8 +583,8 @@ public class FXMLController implements Initializable {
 
     private void initData() {
         List<MaterialDataForOrder> materialOrderList = new ArrayList<>();
-        materialOrderList.add(new MaterialDataForOrder("МДФ 19мм", 1.5));
-        materialOrderList.add(new MaterialDataForOrder("МДФ 16мм", 2.5));
+        materialOrderList.add(new MaterialDataForOrder("МДФ 19мм односторонний", 1.5));
+        materialOrderList.add(new MaterialDataForOrder("МДФ 16мм односторонний", 2.5));
         Order order = new Order("11.03.2021", "1122", materialOrderList, "покраска");
         Order order1 = new Order("12.03.2021", "1155", materialOrderList, "покраска");
         Order order2 = new Order("10.03.2021", "99448", materialOrderList, "покраска");

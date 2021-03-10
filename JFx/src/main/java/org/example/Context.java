@@ -7,7 +7,7 @@ public class Context {
     }
 
     private FXMLMaterialController fxmlMaterialController;
-    public void setFXMLController(FXMLMaterialController fxmlMaterialController) {
+    public void setFXMLMaterialController(FXMLMaterialController fxmlMaterialController) {
         this.fxmlMaterialController = fxmlMaterialController;
     }
 

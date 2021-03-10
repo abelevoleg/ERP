@@ -18,7 +18,7 @@ public class FXMLMaterialController implements Initializable {
     ObservableList<Material> materialList = FXCollections.observableArrayList();
 
     @FXML
-    private TableView <Material> tableMaterial;
+    TableView <Material> tableMaterial;
 
     @FXML
     private TableColumn nameMaterialColumn;
@@ -154,7 +154,7 @@ public class FXMLMaterialController implements Initializable {
         quantityMaterialColumn.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantity"));
         tableMaterial.setItems(materialList);
 
-        Context.getInstance().setFXMLController(this);
+        Context.getInstance().setFXMLMaterialController(this);
     }
 
     private void initData() {

@@ -181,11 +181,17 @@ public class FXMLMaterialController implements Initializable {
         lackMaterialList.clear();
         FXMLController controller = Context.getInstance().getFXMLController();
         int quantityOrders = Integer.parseInt(quantityForCheck.getText());
-
-        if (quantityOrders > controller.orderList.size()){
-            quantityOrders = controller.orderList.size();
+        List<Order> newOrders = new ArrayList<>();
+        for (Order order : controller.orderList){
+            if (order.getStatus() == Order.StatusOfOrder.NEW){
+                newOrders.add(order);
+            }
         }
-        List<Order> checkOrderList = controller.orderList.subList(0, quantityOrders);
+
+        if (quantityOrders > newOrders.size()){
+            quantityOrders = newOrders.size();
+        }
+        List<Order> checkOrderList = newOrders.subList(0, quantityOrders);
 
         for (Material material : materialList){
             int lackQuantity = material.getQuantity();

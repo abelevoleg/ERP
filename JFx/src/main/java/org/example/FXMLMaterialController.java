@@ -11,23 +11,41 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class FXMLMaterialController implements Initializable {
     ObservableList<Material> materialList = FXCollections.observableArrayList();
+    ObservableList<LackMaterialData> lackMaterialList = FXCollections.observableArrayList();
+
+    // площадь листа материала в метрах квадратных (стандартный размер 2,8х2,07м)
+    private static final double LISTAREA = 5.796;
 
     @FXML
     TableView <Material> tableMaterial;
 
     @FXML
-    private TableColumn nameMaterialColumn;
+    private TableView<LackMaterialData> tableMaterialLack;
 
     @FXML
-    private TableColumn descriptionMaterialColumn;
+    private TableColumn<Material, String> nameMaterialColumn;
 
     @FXML
-    private TableColumn quantityMaterialColumn;
+    private TableColumn<Material, String> descriptionMaterialColumn;
+
+    @FXML
+    private TableColumn<Material, Integer> quantityMaterialColumn;
+
+    @FXML
+    private TableColumn<LackMaterialData, String> lackMaterialColumn;
+
+    @FXML
+    private TableColumn<LackMaterialData, Integer> lackQuantityColumn;
+
+    @FXML
+    private TableColumn<LackMaterialData, String> lackMaterialOrderNumber;
 
     @FXML
     private TextField materialDescription;
@@ -37,6 +55,18 @@ public class FXMLMaterialController implements Initializable {
 
     @FXML
     private TextField quantity;
+
+    @FXML
+    private TextField quantityForCheck;
+
+    @FXML
+    private Button checkOrders;
+
+    @FXML
+    private TextField numberForCheck;
+
+    @FXML
+    private Button checkNumberOrder;
 
     @FXML
     private Button putMaterial;
@@ -146,13 +176,107 @@ public class FXMLMaterialController implements Initializable {
         saveMaterialInBase.setDisable(true);
     }
 
+    @FXML
+    private void checkMaterialForOrders(ActionEvent actionEvent) {
+        lackMaterialList.clear();
+        FXMLController controller = Context.getInstance().getFXMLController();
+        int quantityOrders = Integer.parseInt(quantityForCheck.getText());
+
+        if (quantityOrders > controller.orderList.size()){
+            quantityOrders = controller.orderList.size();
+        }
+        List<Order> checkOrderList = controller.orderList.subList(0, quantityOrders);
+
+        for (Material material : materialList){
+            int lackQuantity = material.getQuantity();
+            String orders = "";
+            for (Order checkOrder : checkOrderList){
+                for (MaterialDataForOrder materialDataForOrder : checkOrder.getMaterialList()){
+                    String materialName = materialDataForOrder.getMaterialName();
+                    if (materialName.equals(material.getName())){
+                        lackQuantity = lackQuantity - (int) (materialDataForOrder.getQuantity() / LISTAREA + 0.75);
+                        if (lackQuantity < 0){
+                            orders = orders + checkOrder.getNumber() + " ";
+                        }
+                    }
+                }
+            }
+            if (lackQuantity < 0) {
+                LackMaterialData lackMaterialData = new LackMaterialData(material.getName(), orders, lackQuantity);
+                lackMaterialList.add(lackMaterialData);
+            }
+        }
+        haveMaterial(checkOrderList);
+        Collections.sort(lackMaterialList);
+    }
+
+    private void haveMaterial(List<Order> checkOrderList){
+        for (Order order : checkOrderList){
+            for (MaterialDataForOrder m : order.getMaterialList()){
+                boolean haveMaterialInBase = false;
+                String materialName = m.getMaterialName();
+                for (Material material : materialList){
+                    if (materialName.equals(material.getName())){
+                        haveMaterialInBase = true;
+                    }
+                }
+                if (!haveMaterialInBase){
+                    LackMaterialData lackMaterialData = new LackMaterialData(materialName, order.getNumber(), -(int) (m.getQuantity() / LISTAREA + 0.75));
+                    lackMaterialList.add(lackMaterialData);
+                }
+            }
+        }
+    }
+
+    @FXML
+    private void checkMaterialForNumberOrder(ActionEvent actionEvent) {
+        Order checkOrder = null;
+        lackMaterialList.clear();
+        FXMLController controller = Context.getInstance().getFXMLController();
+        List<Order> orderList = controller.orderList;
+        for (Order order : orderList) {
+            if (numberForCheck.getText().equals(order.getNumber())){
+                checkOrder = order;
+                break;
+            }
+        }
+
+        if (checkOrder == null){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Заказ с таким номером не найден!");
+            alert.showAndWait();
+            return;
+        }
+
+        for (MaterialDataForOrder materialDataForOrder : checkOrder.getMaterialList()){
+            String materialName = materialDataForOrder.getMaterialName();
+            for (Material material : materialList){
+                if (materialName.equals(material.getName())){
+                    int lackQuantity = material.getQuantity() - (int) (materialDataForOrder.getQuantity() / LISTAREA + 0.75);
+                    if (lackQuantity < 0){
+                        LackMaterialData lackMaterialData = new LackMaterialData(materialName, checkOrder.getNumber(), lackQuantity);
+                        lackMaterialList.add(lackMaterialData);
+                    }
+                    break;
+                }
+            }
+        }
+
+        haveMaterial(List.of(checkOrder));
+        Collections.sort(lackMaterialList);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initData();
-        nameMaterialColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("name"));
-        descriptionMaterialColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("materialDescription"));
-        quantityMaterialColumn.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantity"));
+        nameMaterialColumn.setCellValueFactory(new PropertyValueFactory<Material, String>("name"));
+        descriptionMaterialColumn.setCellValueFactory(new PropertyValueFactory<Material, String>("materialDescription"));
+        quantityMaterialColumn.setCellValueFactory(new PropertyValueFactory<Material, Integer>("quantity"));
         tableMaterial.setItems(materialList);
+
+        lackMaterialColumn.setCellValueFactory(new PropertyValueFactory<LackMaterialData, String>("materialName"));
+        lackQuantityColumn.setCellValueFactory(new PropertyValueFactory<LackMaterialData, Integer>("lackQuantity"));
+        lackMaterialOrderNumber.setCellValueFactory(new PropertyValueFactory<LackMaterialData, String>("orderNumber"));
+        tableMaterialLack.setItems(lackMaterialList);
 
         Context.getInstance().setFXMLMaterialController(this);
     }
@@ -160,7 +284,7 @@ public class FXMLMaterialController implements Initializable {
     private void initData() {
         Material material = new Material("МДФ 22мм односторонний", "односторонняя ламинация", 3);
         Material material1 = new Material("МДФ 19мм односторонний", "односторонняя ламинация", 15);
-        Material material2 = new Material("МДФ 16мм односторонний", "односторонняя ламинация", 10);
+        Material material2 = new Material("МДФ 16мм односторонний", "односторонняя ламинация", 0);
         Material material3 = new Material("МДФ 25мм односторонний", "односторонняя ламинация", 7);
         Material material4 = new Material("МДФ 30мм", "без ламинации", 5);
         materialList.addAll(material, material1, material2, material3, material4);

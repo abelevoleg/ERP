@@ -25,7 +25,7 @@ import javafx.util.converter.DoubleStringConverter;
 
 
 public class FXMLController implements Initializable {
-    private ObservableList<Order> orderList = FXCollections.observableArrayList();
+    ObservableList<Order> orderList = FXCollections.observableArrayList();
     private ObservableList<MaterialDataForOrder> materialListForOrder = FXCollections.observableArrayList();
     private ObservableList<MaterialDataForOrder> materialListInOrder = FXCollections.observableArrayList();
     private ObservableList<Order.StatusOfOrder> statusList = FXCollections.observableArrayList(List.of(Order.StatusOfOrder.values()));
@@ -36,8 +36,8 @@ public class FXMLController implements Initializable {
     private ArrayList<String> paintingOrderNumbers = new ArrayList<>();
     private ArrayList<String> packingOrderNumbers = new ArrayList<>();
 
-    // площадь листа материала (стандартный размер 2800х2070мм)
-    private static final double listArea = 5.796;
+    // площадь листа материала в метрах квадратных (стандартный размер 2,8х2,07м)
+    private static final double LISTAREA = 5.796;
 
     // гистограмма заказов в работе
     @FXML
@@ -147,6 +147,7 @@ public class FXMLController implements Initializable {
     @FXML
     public ChoiceBox<String> material;
 
+    // области вывода номеров заказов, соответствующих столбцам гистограммы
     @FXML
     private Label ncOrders;
 
@@ -221,7 +222,7 @@ public class FXMLController implements Initializable {
 
     // удаление выбранного материала в таблице материалов нового заказа
     @FXML
-    public void deleteNewMaterial(KeyEvent keyEvent) {
+    private void deleteNewMaterial(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.DELETE) {
             int index = tableMaterialNewOrder.getSelectionModel().getFocusedIndex();
             materialListForOrder.remove(index);
@@ -235,7 +236,7 @@ public class FXMLController implements Initializable {
             Order.dateformatddMMyyyy.parse(newDate.getText());
         } catch (ParseException e) {
             newDate.setStyle("-fx-text-inner-color:Red;");
-            newDate.setPromptText("dd.mm.yyyy");
+            newDate.setText("dd.mm.yyyy");
             Alert alert = new Alert(Alert.AlertType.ERROR, "Неверный формат даты!");
             alert.showAndWait();
             return;
@@ -284,7 +285,8 @@ public class FXMLController implements Initializable {
         String findNumber = numberToFind.getText();
         for (Order order : orderList){
             if (findNumber.equals(order.getNumber())){
-                Order selectedOrder = order;
+                Order selectedOrder;
+                selectedOrder = order;
                 tableOrder.requestFocus();
                 tableOrder.getFocusModel().focus(orderList.indexOf(selectedOrder));
                 tableOrder.scrollTo(selectedOrder);
@@ -323,7 +325,7 @@ public class FXMLController implements Initializable {
 
     // удаление выбранного материала в таблице материалов выбранного заказа
     @FXML
-    public void deleteMaterial(KeyEvent keyEvent) {
+    private void deleteMaterial(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.DELETE) {
             int index = tableMaterialOrder.getSelectionModel().getFocusedIndex();
             materialListInOrder.remove(index);
@@ -333,6 +335,7 @@ public class FXMLController implements Initializable {
     // сохранение измененного заказа
     @FXML
     private void putOrder(ActionEvent event) {
+        // проверка формата даты
         try {
             Order.dateformatddMMyyyy.parse(date.getText());
         } catch (ParseException e) {
@@ -341,42 +344,59 @@ public class FXMLController implements Initializable {
             alert.showAndWait();
             return;
         }
+
+        // создание измененного заказа
         List<MaterialDataForOrder> materialListForPutOrder = new ArrayList<>(materialListInOrder);
         Order changedOrder = new Order(date.getText(), number.getText(), materialListForPutOrder, description.getText());
         changedOrder.setStatusOfOrder(status.getValue());
         int index = tableOrder.getSelectionModel().getFocusedIndex();
 
+        // действия при изменении статуса заказа
         if (changedOrder.getStatus() != orderList.get(index).getStatus()){
+            // проверка наличия материала на заказ, выдаваемый в работу
             if (orderList.get(index).getStatus() == Order.StatusOfOrder.NEW){
                 FXMLMaterialController cont = Context.getInstance().getFXMLMaterialController();
-//                List<Material> materialList = FXCollections.observableArrayList();
-//                materialList.addAll(cont.materialList);
-                for (MaterialDataForOrder materialData : materialListForPutOrder){
-                    for (Material m : cont.materialList){
-                        if (materialData.getMaterialName().equals(m.getName())){
-                            int materialQuantity = m.getQuantity() - (int) (materialData.getQuantity() / listArea + 0.75);
-                            if (materialQuantity < 0){
+                for (MaterialDataForOrder materialData : materialListForPutOrder) {
+                    boolean materialExist = false;
+                    for (Material m : cont.materialList) {
+                        if (materialData.getMaterialName().equals(m.getName())) {
+                            materialExist = true;
+                            int materialQuantity = m.getQuantity() - (int) (materialData.getQuantity() / LISTAREA + 0.75);
+                            if (materialQuantity < 0) {
                                 Alert alert = new Alert(Alert.AlertType.ERROR, "Нет материала! Невозможно выдать заказ в работу!");
                                 alert.showAndWait();
                                 return;
                             }
+                            break;
+                        }
+                    }
+                    if (!materialExist) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR, "Нет материала! Невозможно выдать заказ в работу!");
+                        alert.showAndWait();
+                        return;
+                    }
+                }
+
+                // списание материала, если материал в наличии и новый заказ выдается в работу
+                for (MaterialDataForOrder materialData : materialListForPutOrder) {
+                    for (Material m : cont.materialList) {
+                        if (materialData.getMaterialName().equals(m.getName())) {
+                            int materialQuantity = m.getQuantity() - (int) (materialData.getQuantity() / LISTAREA + 0.75);
                             m.setQuantity(materialQuantity);
-                            cont.tableMaterial.refresh();
-                            Context.getInstance().setFXMLMaterialController(cont);
+                            break;
                         }
                     }
                 }
+                cont.tableMaterial.refresh();
+                Context.getInstance().setFXMLMaterialController(cont);
+
+                // возврат материала на склад, если заказ выдан ошибочно и переводится обратно в статус "NEW"
             } else if (changedOrder.getStatus() == Order.StatusOfOrder.NEW){
                 FXMLMaterialController cont = Context.getInstance().getFXMLMaterialController();
                 for (MaterialDataForOrder materialData : materialListForPutOrder){
                     for (Material m : cont.materialList){
                         if (materialData.getMaterialName().equals(m.getName())){
-                            int materialQuantity = m.getQuantity() + (int) (materialData.getQuantity() / listArea + 0.75);
-                            if (materialQuantity < 0){
-                                Alert alert = new Alert(Alert.AlertType.ERROR, "Нет материала! Невозможно выдать заказ в работу!");
-                                alert.showAndWait();
-                                return;
-                            }
+                            int materialQuantity = m.getQuantity() + (int) (materialData.getQuantity() / LISTAREA + 0.75);
                             m.setQuantity(materialQuantity);
                             cont.tableMaterial.refresh();
                             Context.getInstance().setFXMLMaterialController(cont);
@@ -384,9 +404,11 @@ public class FXMLController implements Initializable {
                     }
                 }
             }
+            // обновление гистограммы
             histogramUpdate(changedOrder, orderList.get(index));
         }
 
+        // сохранение измененного заказа в таблицу и очистка полей
         orderList.set(index, changedOrder);
         Collections.sort(orderList);
         materialListInOrder.clear();
@@ -528,6 +550,7 @@ public class FXMLController implements Initializable {
         MainApp.changeRoot("materialMode");
     }
 
+    // сохранение состояния таблиц заказов и материалов в файл
     @FXML
     void saveToFile(){
         FileOutputStream outputStream = null;
@@ -542,6 +565,7 @@ public class FXMLController implements Initializable {
         }
     }
 
+    // загрузка состояния таблиц заказов и материалов из файла
     @FXML
     void openFromFile(){
         FileInputStream fileInputStream = null;
@@ -579,6 +603,8 @@ public class FXMLController implements Initializable {
         status.setItems(statusList);
 
         histogramInit();
+
+        Context.getInstance().setFXMLController(this);
     }
 
     private void initData() {

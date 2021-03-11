@@ -1,8 +1,6 @@
 package org.example;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.util.Date;
 
 public class Material implements Comparable<Material>, Serializable {
     private String name;

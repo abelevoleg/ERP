@@ -105,6 +105,9 @@ public class FXMLController implements Initializable {
     private Button warehouse;
 
     @FXML
+    private Button newOrder;
+
+    @FXML
     private Button saveOrder;
 
     @FXML

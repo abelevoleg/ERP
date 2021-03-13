@@ -26,33 +26,27 @@
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
-        <Menu mnemonicParsing="false" text="File">
+        <Menu mnemonicParsing="false" text="File" >
           <items>
-            <MenuItem mnemonicParsing="false" text="New" />
-            <MenuItem mnemonicParsing="false" text="Open…" />
-            <Menu mnemonicParsing="false" text="Open Recent" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Close" />
-            <MenuItem mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Save As…" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
+            <MenuItem fx:id="open" onAction="#openFromFile" mnemonicParsing="false" text="Open…" />
+            <MenuItem fx:id="save" onAction="#save" mnemonicParsing="false" text="Save" />
+            <MenuItem fx:id="saveToFile" onAction="#saveToFile" mnemonicParsing="false" text="Save As…" />
           </items>
         </Menu>
-        <Menu mnemonicParsing="false" text="Edit">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Undo" />
-            <MenuItem mnemonicParsing="false" text="Redo" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
-          </items>
-        </Menu>
+<!--        <Menu mnemonicParsing="false" text="Edit">-->
+<!--          <items>-->
+<!--            <MenuItem mnemonicParsing="false" text="Undo" />-->
+<!--            <MenuItem mnemonicParsing="false" text="Redo" />-->
+<!--            <SeparatorMenuItem mnemonicParsing="false" />-->
+<!--            <MenuItem mnemonicParsing="false" text="Cut" />-->
+<!--            <MenuItem mnemonicParsing="false" text="Copy" />-->
+<!--            <MenuItem mnemonicParsing="false" text="Paste" />-->
+<!--            <MenuItem mnemonicParsing="false" text="Delete" />-->
+<!--            <SeparatorMenuItem mnemonicParsing="false" />-->
+<!--            <MenuItem mnemonicParsing="false" text="Select All" />-->
+<!--            <MenuItem mnemonicParsing="false" text="Unselect All" />-->
+<!--          </items>-->
+<!--        </Menu>-->
         <Menu mnemonicParsing="false" text="Help">
           <items>
             <MenuItem mnemonicParsing="false" text="About ERP Шкафулькин" />

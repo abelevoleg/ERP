@@ -24,6 +24,15 @@ public class FXMLMaterialController implements Initializable {
     private static final double LISTAREA = 5.796;
 
     @FXML
+    private MenuItem save;
+
+    @FXML
+    private MenuItem saveToFile;
+
+    @FXML
+    public MenuItem open;
+
+    @FXML
     TableView <Material> tableMaterial;
 
     @FXML
@@ -176,6 +185,7 @@ public class FXMLMaterialController implements Initializable {
         saveMaterialInBase.setDisable(true);
     }
 
+    // проверка наличия материалов для заданного количества планируемых к выдаче в работу заказов
     @FXML
     private void checkMaterialForOrders(ActionEvent actionEvent) {
         lackMaterialList.clear();
@@ -216,6 +226,7 @@ public class FXMLMaterialController implements Initializable {
         Collections.sort(lackMaterialList);
     }
 
+    // проверка существования материала в базе
     private void haveMaterial(List<Order> checkOrderList){
         for (Order order : checkOrderList){
             for (MaterialDataForOrder m : order.getMaterialList()){
@@ -234,6 +245,7 @@ public class FXMLMaterialController implements Initializable {
         }
     }
 
+    // проверка наличия материала по номеру заказа
     @FXML
     private void checkMaterialForNumberOrder(ActionEvent actionEvent) {
         Order checkOrder = null;
@@ -269,6 +281,24 @@ public class FXMLMaterialController implements Initializable {
 
         haveMaterial(List.of(checkOrder));
         Collections.sort(lackMaterialList);
+    }
+
+    // сохранение состояния таблиц заказов и материалов в текущий файл
+    @FXML
+    void save(){
+        MenuController.save();
+    }
+
+    // сохранение состояния таблиц заказов и материалов в новый файл
+    @FXML
+    void saveToFile(){
+        MenuController.saveToFile();
+    }
+
+    // загрузка состояния таблиц заказов и материалов из файла
+    @FXML
+    void openFromFile(){
+        MenuController.openFromFile();
     }
 
     @Override

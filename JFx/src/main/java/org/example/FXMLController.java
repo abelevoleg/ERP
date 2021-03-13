@@ -39,6 +39,15 @@ public class FXMLController implements Initializable {
     // площадь листа материала в метрах квадратных (стандартный размер 2,8х2,07м)
     private static final double LISTAREA = 5.796;
 
+    @FXML
+    private MenuItem save;
+
+    @FXML
+    private MenuItem saveToFile;
+
+    @FXML
+    public MenuItem open;
+
     // гистограмма заказов в работе
     @FXML
     private BarChart<String, Integer> orderInWork;
@@ -51,7 +60,7 @@ public class FXMLController implements Initializable {
 
     // список заказов
     @FXML
-    private TableView<Order> tableOrder;
+    TableView<Order> tableOrder;
 
     // список материалов для создания нового заказа
     @FXML
@@ -444,12 +453,25 @@ public class FXMLController implements Initializable {
         statusNames.addAll(Arrays.asList(valuesStatus));
         statusAxe.setCategories(statusNames);
 
+        series.getData().add(new XYChart.Data<>("ЧПУ/раскрой", 0));
+        series.getData().add(new XYChart.Data<>("Присадка", 0));
+        series.getData().add(new XYChart.Data<>("Шлифовка/покраска", 0));
+        series.getData().add(new XYChart.Data<>("На упаковке", 0));
+        orderInWork.getData().add(series);
+    }
+
+    // загрузка данных списка заказов в гистограмму
+    void histogramLoad(List<Order> orderList) {
+        ncOrderNumbers.clear();
+        drillOrderNumbers.clear();
+        paintingOrderNumbers.clear();
+        packingOrderNumbers.clear();
         int startCount = 0;
         int drillCount = 0;
         int paintingCount = 0;
         int packingCount = 0;
-        for (Order order : orderList){
-            switch (order.getStatus()){
+        for (Order order : orderList) {
+            switch (order.getStatus()) {
                 case NEW:
                     break;
                 case START:
@@ -470,11 +492,10 @@ public class FXMLController implements Initializable {
                     break;
             }
         }
-        series.getData().add(new XYChart.Data<>("ЧПУ/раскрой", startCount));
-        series.getData().add(new XYChart.Data<>("Присадка", drillCount));
-        series.getData().add(new XYChart.Data<>("Шлифовка/покраска", paintingCount));
-        series.getData().add(new XYChart.Data<>("На упаковке", packingCount));
-        orderInWork.getData().add(series);
+        series.getData().get(0).setYValue(startCount);
+        series.getData().get(1).setYValue(drillCount);
+        series.getData().get(2).setYValue(paintingCount);
+        series.getData().get(3).setYValue(packingCount);
 
         setNumberToLabels();
     }
@@ -550,35 +571,22 @@ public class FXMLController implements Initializable {
         MainApp.changeRoot("materialMode");
     }
 
-    // сохранение состояния таблиц заказов и материалов в файл
+    // сохранение состояния таблиц заказов и материалов в текущий файл
+    @FXML
+    void save(){
+        MenuController.save();
+    }
+
+    // сохранение состояния таблиц заказов и материалов в новый файл
     @FXML
     void saveToFile(){
-        FileOutputStream outputStream = null;
-        try {
-            outputStream = new FileOutputStream("C:\\Users\\Oleg\\Desktop\\save.ser");
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            ArrayList<Order> q1 = new ArrayList<>(orderList);
-            objectOutputStream.writeObject(q1);
-            objectOutputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        MenuController.saveToFile();
     }
 
     // загрузка состояния таблиц заказов и материалов из файла
     @FXML
     void openFromFile(){
-        FileInputStream fileInputStream = null;
-        try {
-            fileInputStream = new FileInputStream("C:\\Users\\Oleg\\Desktop\\save.ser");
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            ArrayList<Order> q2;
-            q2 = (ArrayList<Order>) objectInputStream.readObject();
-            orderList.addAll(q2);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        histogramInit();
+        MenuController.openFromFile();
     }
 
     @Override

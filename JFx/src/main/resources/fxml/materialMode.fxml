@@ -144,11 +144,18 @@
                         <TextField id="numberForCheck" fx:id="numberForCheck" layoutX="464.0" layoutY="204.0" prefHeight="31.0" prefWidth="60.0" />
                         <Button fx:id="checkNumberOrder" layoutX="529.0" layoutY="204.0" onAction="#checkMaterialForNumberOrder" prefHeight="31.0" prefWidth="91.0" style="-fx-background-color: lightblue;" text="Проверить" textAlignment="CENTER" />
 
-                         <Button fx:id="enterpriseSet" layoutX="17.0" onAction="#setEnterpriseMode" prefHeight="31.0" prefWidth="172.0" style="-fx-background-color: yellow;" text="Производство" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="17.0" AnchorPane.rightAnchor="435.0" />
-                         <Button disable="true" layoutX="198.0" prefHeight="31.0" prefWidth="172.0" style="-fx-background-color: yellow;" text="Склад" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="198.0" AnchorPane.rightAnchor="254.0">
+                         <Button fx:id="enterpriseSet" layoutX="17.0" onAction="#setEnterpriseMode" prefHeight="31.0" prefWidth="125.0" style="-fx-background-color: yellow;" text="Производство" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="17.0">
+                             <font>
+                                 <Font name="System Bold" size="18.0" />
+                             </font></Button>
+                         <Button disable="true" layoutX="147.0" prefHeight="31.0" prefWidth="125.0" style="-fx-background-color: yellow;" text="Склад" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="147.0">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font></Button>
+                         <Button fx:id="archiveSet" layoutX="277.0" onAction="#setArchiveMode" prefHeight="31.0" prefWidth="125.0" style="-fx-background-color: yellow; -fx-border-color: grey" text="Архив" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="277.0">
+                             <font>
+                                 <Font name="System Bold" size="18.0" />
+                             </font></Button>
                      </children>
                   </AnchorPane>
                </content>

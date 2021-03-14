@@ -37,7 +37,7 @@ public class FXMLController implements Initializable {
     private ArrayList<String> packingOrderNumbers = new ArrayList<>();
 
     // площадь листа материала в метрах квадратных (стандартный размер 2,8х2,07м)
-    private static final double LISTAREA = 5.796;
+    static final double LISTAREA = 5.796;
 
     @FXML
     private MenuItem save;
@@ -90,11 +90,11 @@ public class FXMLController implements Initializable {
     @FXML
     private TableColumn<MaterialDataForOrder, Double> quantityNewColumn;
 
-    // колонка названия материала в списке для создания нового заказа
+    // колонка названия материала в списке
     @FXML
     private TableColumn<MaterialDataForOrder,String> materialColumn;
 
-    // количество материала в списке для создания нового заказа
+    // количество материала в списке
     @FXML
     private TableColumn<MaterialDataForOrder, Double> quantityColumn;
 
@@ -103,6 +103,9 @@ public class FXMLController implements Initializable {
 
     @FXML
     private Button warehouse;
+
+    @FXML
+    private Button archive;
 
     @FXML
     private Button newOrder;
@@ -293,8 +296,20 @@ public class FXMLController implements Initializable {
 
     // поиск заказа в таблице заказов
     @FXML
-    private void findOrder(ActionEvent event) {
+    private void findOrder(ActionEvent event) throws IOException {
         String findNumber = numberToFind.getText();
+        if (!findOrder(findNumber)) {
+            FXMLArchiveController archiveCont = Context.getInstance().getFXMLArchiveController();
+            if (archiveCont.findOrder(findNumber)) {
+                MainApp.changeRoot("archiveMode");
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Заказ не найден!");
+                alert.showAndWait();
+            }
+        }
+    }
+
+    boolean findOrder(String findNumber) {
         for (Order order : orderList){
             if (findNumber.equals(order.getNumber())){
                 Order selectedOrder;
@@ -310,10 +325,10 @@ public class FXMLController implements Initializable {
                 materialListInOrder.addAll(selectedOrder.getMaterialList());
                 putOrder.setDisable(false);
                 deleteOrder.setDisable(false);
-                return;
+                return true;
             }
         }
-        numberToFind.setText(findNumber + " не найден");
+        return false;
     }
 
 //    // изменение материала в таблице материалов выбранного заказа
@@ -416,13 +431,24 @@ public class FXMLController implements Initializable {
                     }
                 }
             }
-            // обновление гистограммы
+
             histogramUpdate(changedOrder, orderList.get(index));
         }
 
-        // сохранение измененного заказа в таблицу и очистка полей
+        // сохранение измененного заказа в таблицу
         orderList.set(index, changedOrder);
-        Collections.sort(orderList);
+
+        // перенос заказа в архив, если новый статус "Отгружен"
+        if (changedOrder.getStatus() == Order.StatusOfOrder.FINISH) {
+            FXMLArchiveController archiveCont = Context.getInstance().getFXMLArchiveController();
+            archiveCont.orderArchiveList.add(changedOrder);
+            archiveCont.tableArchiveOrder.refresh();
+            Context.getInstance().setFXMLArchiveController(archiveCont);
+
+            orderList.remove(index);
+        } else Collections.sort(orderList);
+
+        // очистка полей формы данных материала
         materialListInOrder.clear();
         date.setStyle("-fx-text-inner-color:Black;");
         date.clear();
@@ -572,6 +598,12 @@ public class FXMLController implements Initializable {
     @FXML
     private void setWarehouseMode(ActionEvent actionEvent) throws IOException {
         MainApp.changeRoot("materialMode");
+    }
+
+    // переключение в режим архива заказов
+    @FXML
+    public void setArchiveMode(ActionEvent actionEvent) throws IOException {
+        MainApp.changeRoot("archiveMode");
     }
 
     // сохранение состояния таблиц заказов и материалов в текущий файл

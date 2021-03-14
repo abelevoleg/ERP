@@ -15,13 +15,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FXMLMaterialController implements Initializable {
     ObservableList<Material> materialList = FXCollections.observableArrayList();
     ObservableList<LackMaterialData> lackMaterialList = FXCollections.observableArrayList();
-
-    // площадь листа материала в метрах квадратных (стандартный размер 2,8х2,07м)
-    private static final double LISTAREA = 5.796;
 
     @FXML
     private MenuItem save;
@@ -102,6 +101,9 @@ public class FXMLMaterialController implements Initializable {
     private Button enterpriseSet;
 
     @FXML
+    private Button archiveSet;
+
+    @FXML
     private void choiceMaterial(MouseEvent mouseEvent) {
         Material selectedMaterial = tableMaterial.getSelectionModel().getSelectedItem();
         name.setText(selectedMaterial.getName());
@@ -152,6 +154,12 @@ public class FXMLMaterialController implements Initializable {
         MainApp.changeRoot("primary");
     }
 
+    // переключение в режим архива заказов
+    @FXML
+    public void setArchiveMode(ActionEvent actionEvent) throws IOException {
+        MainApp.changeRoot("archiveMode");
+    }
+
     @FXML
     private void newMaterialInBase(ActionEvent actionEvent) {
         newName.setDisable(false);
@@ -191,12 +199,7 @@ public class FXMLMaterialController implements Initializable {
         lackMaterialList.clear();
         FXMLController controller = Context.getInstance().getFXMLController();
         int quantityOrders = Integer.parseInt(quantityForCheck.getText());
-        List<Order> newOrders = new ArrayList<>();
-        for (Order order : controller.orderList){
-            if (order.getStatus() == Order.StatusOfOrder.NEW){
-                newOrders.add(order);
-            }
-        }
+        List<Order> newOrders = controller.orderList.stream().filter(order -> order.getStatus() == Order.StatusOfOrder.NEW).collect(Collectors.toList());
 
         if (quantityOrders > newOrders.size()){
             quantityOrders = newOrders.size();
@@ -210,7 +213,7 @@ public class FXMLMaterialController implements Initializable {
                 for (MaterialDataForOrder materialDataForOrder : checkOrder.getMaterialList()){
                     String materialName = materialDataForOrder.getMaterialName();
                     if (materialName.equals(material.getName())){
-                        lackQuantity = lackQuantity - (int) (materialDataForOrder.getQuantity() / LISTAREA + 0.75);
+                        lackQuantity = lackQuantity - (int) (materialDataForOrder.getQuantity() / FXMLController.LISTAREA + 0.75);
                         if (lackQuantity < 0){
                             orders = orders + checkOrder.getNumber() + " ";
                         }
@@ -223,7 +226,11 @@ public class FXMLMaterialController implements Initializable {
             }
         }
         haveMaterial(checkOrderList);
-        Collections.sort(lackMaterialList);
+
+        if (lackMaterialList.isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Материал в наличии!");
+            alert.showAndWait();
+        } else Collections.sort(lackMaterialList);
     }
 
     // проверка существования материала в базе
@@ -238,7 +245,7 @@ public class FXMLMaterialController implements Initializable {
                     }
                 }
                 if (!haveMaterialInBase){
-                    LackMaterialData lackMaterialData = new LackMaterialData(materialName, order.getNumber(), -(int) (m.getQuantity() / LISTAREA + 0.75));
+                    LackMaterialData lackMaterialData = new LackMaterialData(materialName, order.getNumber(), -(int) (m.getQuantity() / FXMLController.LISTAREA + 0.75));
                     lackMaterialList.add(lackMaterialData);
                 }
             }
@@ -269,7 +276,7 @@ public class FXMLMaterialController implements Initializable {
             String materialName = materialDataForOrder.getMaterialName();
             for (Material material : materialList){
                 if (materialName.equals(material.getName())){
-                    int lackQuantity = material.getQuantity() - (int) (materialDataForOrder.getQuantity() / LISTAREA + 0.75);
+                    int lackQuantity = material.getQuantity() - (int) (materialDataForOrder.getQuantity() / FXMLController.LISTAREA + 0.75);
                     if (lackQuantity < 0){
                         LackMaterialData lackMaterialData = new LackMaterialData(materialName, checkOrder.getNumber(), lackQuantity);
                         lackMaterialList.add(lackMaterialData);
@@ -280,7 +287,11 @@ public class FXMLMaterialController implements Initializable {
         }
 
         haveMaterial(List.of(checkOrder));
-        Collections.sort(lackMaterialList);
+
+        if (lackMaterialList.isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Материал в наличии!");
+            alert.showAndWait();
+        } else Collections.sort(lackMaterialList);
     }
 
     // сохранение состояния таблиц заказов и материалов в текущий файл

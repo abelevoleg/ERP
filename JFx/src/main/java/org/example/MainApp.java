@@ -17,23 +17,24 @@ public class MainApp extends Application {
     static Stage stage;
     private static Scene scene;
     private static Scene sceneMaterial;
+    private static Scene sceneArchive;
 
     @Override
     public void start(@SuppressWarnings("exports") Stage s) throws IOException {
         stage=s;
-        setRoot("primary", "materialMode", "ERP Шкафулькин");
+        setRoot("primary", "materialMode", "archiveMode", "ERP Шкафулькин");
     }
 
     static void setRoot(String fxml, String materialModeFxml) throws IOException {
         setRoot(fxml,stage.getTitle());
     }
 
-    static void setRoot(String fxml, String materialModeFxml, String title) throws IOException {
+    static void setRoot(String fxml, String materialModeFxml, String archiveModeFxml, String title) throws IOException {
         scene = new Scene(loadFXML(fxml));
         sceneMaterial = new Scene(loadFXML(materialModeFxml));
+        sceneArchive = new Scene(loadFXML(archiveModeFxml));
         stage.setTitle(title);
         stage.setScene(scene);
-//        stage.getScene().getStylesheets().add("fxml/styles.css");
         stage.show();
     }
 
@@ -44,6 +45,9 @@ public class MainApp extends Application {
                 break;
             case "materialMode":
                 stage.setScene(sceneMaterial);
+                break;
+            case "archiveMode":
+                stage.setScene(sceneArchive);
                 break;
         }
     }

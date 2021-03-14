@@ -8,6 +8,7 @@ public class Context {
 
     private FXMLController fxmlController;
     private FXMLMaterialController fxmlMaterialController;
+    private FXMLArchiveController fxmlArchiveController;
 
     public void setFXMLController(FXMLController fxmlController) {
         this.fxmlController = fxmlController;
@@ -23,6 +24,14 @@ public class Context {
 
     public FXMLMaterialController getFXMLMaterialController() {
         return fxmlMaterialController;
+    }
+
+    public void setFXMLArchiveController(FXMLArchiveController fxmlArchiveController) {
+        this.fxmlArchiveController = fxmlArchiveController;
+    }
+
+    public FXMLArchiveController getFXMLArchiveController() {
+        return fxmlArchiveController;
     }
 }
 

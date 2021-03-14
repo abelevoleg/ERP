@@ -91,7 +91,7 @@
 <!--               <content>-->
                   <AnchorPane maxWidth="372.0" prefHeight="692.0" prefWidth="372.0" VBox.vgrow="SOMETIMES">
                      <children>
-                        <TableView fx:id="tableOrder" editable="true" layoutX="0.0" layoutY="34.0" maxHeight="-Infinity" maxWidth="372.0" onMouseClicked="#choiceOrder" prefHeight="658.0" prefWidth="372.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="32.0" VBox.vgrow="SOMETIMES">
+                        <TableView fx:id="tableOrder" editable="true" layoutX="0.0" layoutY="34.0" maxHeight="-Infinity" maxWidth="372.0" onMouseClicked="#choiceOrder" prefHeight="658.0" prefWidth="372.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="35.0" VBox.vgrow="SOMETIMES">
                           <columns>
                             <TableColumn fx:id="dateOrderColumn" prefWidth="103.0" sortable="false" style="-fx-alignment: CENTER;" text="Срок сдачи" />
                             <TableColumn fx:id="numberOrderColumn" editable="false" prefWidth="117.0" sortable="false" style="-fx-alignment: CENTER;" text="Номер заказа" />
@@ -164,14 +164,19 @@
                               </NumberAxis>
                           </yAxis>
                         </BarChart>
-                        <Button fx:id="enterprise" disable="true" layoutX="167.0" prefHeight="31.0" prefWidth="172.0" style="-fx-background-color: yellow; -fx-border-color: grey" text="Производство" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="412.0">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font></Button>
-                        <Button fx:id="warehouse" layoutX="347.0" onAction="#setWarehouseMode" prefHeight="31.0" prefWidth="172.0" style="-fx-background-color: yellow; -fx-border-color: grey" text="Склад" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="347.0" AnchorPane.rightAnchor="232.0">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font></Button>
+                         <Button disable="true" layoutX="167.0" prefHeight="33.0" prefWidth="125.0" style="-fx-background-color: yellow; -fx-border-color: grey" text="Производство" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="167.0" >
+                             <font>
+                                 <Font name="System Bold" size="18.0" />
+                             </font></Button>
+                         <Button fx:id="warehouse" layoutX="297.0" onAction="#setWarehouseMode" prefHeight="33.0" prefWidth="125.0" style="-fx-background-color: yellow; -fx-border-color: grey" text="Склад" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="297.0" >
+                             <font>
+                                 <Font name="System Bold" size="18.0" />
+                             </font></Button>
+                         <Button fx:id="archive" layoutX="427.0" onAction="#setArchiveMode" prefHeight="33.0" prefWidth="125.0" style="-fx-background-color: yellow; -fx-border-color: grey" text="Архив" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="427.0">
+                             <font>
+                                 <Font name="System Bold" size="18.0" />
+                             </font>
+                         </Button>
                         <Label id="ncOrders" fx:id="ncOrders" alignment="BOTTOM_CENTER" layoutX="384.0" layoutY="80.0" prefHeight="323.0" prefWidth="80.0" style="&#10;" textAlignment="CENTER" wrapText="false">
                            <font>
                               <Font size="18.0" fx:id="x11111" />

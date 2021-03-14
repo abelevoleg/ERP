@@ -46,14 +46,6 @@
           </textFill>
         </Label>
         <Label alignment="CENTER" contentDisplay="CENTER" font="$x3" maxWidth="-1.0" prefHeight="20.0" prefWidth="343.0" text="Содержание заказа" textFill="$x4" HBox.hgrow="NEVER" />
-            <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="-1.0" prefHeight="20.0" prefWidth="410.0" text="Состояние производства">
-               <font>
-                  <Font size="14.0" fx:id="x31" />
-               </font>
-               <textFill>
-                  <Color blue="0.625" green="0.625" red="0.625" fx:id="x41" />
-               </textFill>
-            </Label>
       </children>
       <padding>
         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
@@ -65,8 +57,8 @@
                  <children>
                      <TableView fx:id="tableArchiveOrder" editable="true" layoutX="0.0" layoutY="34.0" maxHeight="-Infinity" maxWidth="372.0" onMouseClicked="#choiceOrder" prefHeight="658.0" prefWidth="372.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="35.0" VBox.vgrow="SOMETIMES">
                          <columns>
-                             <TableColumn fx:id="dateArchiveOrderColumn" editable="false" prefWidth="103.0" sortable="false" style="-fx-alignment: CENTER;" text="Срок сдачи" />
-                            <TableColumn fx:id="numberArchiveOrderColumn" editable="false" prefWidth="117.0" sortable="false" style="-fx-alignment: CENTER;" text="Номер заказа" />
+                             <TableColumn fx:id="dateArchiveOrderColumn" editable="false" prefWidth="162.99996948242188" sortable="false" style="-fx-alignment: CENTER;" text="Срок сдачи, факт/план" />
+                            <TableColumn fx:id="numberArchiveOrderColumn" editable="false" prefWidth="57.0" sortable="false" style="-fx-alignment: CENTER;" text="Номер" />
                             <TableColumn fx:id="descriptionArchiveOrderColumn" editable="false" prefWidth="152.0" sortable="false" style="-fx-alignment: CENTER;" text="Описание" />
                          </columns>
                      </TableView>
@@ -117,7 +109,7 @@
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font></Button>
-                        <Button fx:id="warehouse" layoutX="297.0" onAction="#setWarehouseMode" prefHeight="33.0" prefWidth="125.0" style="-fx-background-color: yellow; -fx-border-color: grey" text="Склад" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="297.0" >
+                        <Button fx:id="warehouse" layoutX="297.0" onAction="#setWarehouseMode" prefHeight="33.0" prefWidth="125.0" style="-fx-background-color: yellow; -fx-border-color: grey" text="Склад" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="297.0">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font></Button>

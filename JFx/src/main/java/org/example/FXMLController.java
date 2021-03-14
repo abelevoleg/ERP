@@ -441,6 +441,7 @@ public class FXMLController implements Initializable {
         // перенос заказа в архив, если новый статус "Отгружен"
         if (changedOrder.getStatus() == Order.StatusOfOrder.FINISH) {
             FXMLArchiveController archiveCont = Context.getInstance().getFXMLArchiveController();
+            changedOrder.setDate(Order.dateformatddMMyyyy.format(new Date()) + "/" + changedOrder.getDate());
             archiveCont.orderArchiveList.add(changedOrder);
             archiveCont.tableArchiveOrder.refresh();
             Context.getInstance().setFXMLArchiveController(archiveCont);

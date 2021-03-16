@@ -183,8 +183,6 @@ public class FXMLArchiveController implements Initializable {
         materialListInStatistic.clear();
         summMaterial.setText("Итого: ");
         summOrder.setText("Отгружено заказов: ");
-        x211113 = Color.GRAY;
-        x2111131 = Color.GREY;
 
         Date begin = Order.dateformatddMMyyyy.parse(dateAfter.getText());
         Date end = Order.dateformatddMMyyyy.parse(dateBefore.getText());

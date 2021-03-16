@@ -1,5 +1,6 @@
 package org.example;
 
+import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 
 import java.io.*;
@@ -13,13 +14,17 @@ public class MenuController {
             FileOutputStream outputStream = null;
             FXMLController cont = Context.getInstance().getFXMLController();
             FXMLMaterialController materialCont = Context.getInstance().getFXMLMaterialController();
-            DataForSerialization d = new DataForSerialization(new ArrayList<Order>(cont.orderList), new ArrayList<Material>(materialCont.materialList));
+            FXMLArchiveController archiveCont = Context.getInstance().getFXMLArchiveController();
+            DataForSerialization d = new DataForSerialization(new ArrayList<Order>(cont.orderList),
+                    new ArrayList<Material>(materialCont.materialList), new ArrayList<Order>(archiveCont.orderArchiveList));
             try {
                 outputStream = new FileOutputStream(file);
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                 objectOutputStream.writeObject(d);
                 objectOutputStream.close();
             } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Не удалось сохранить файл!");
+                alert.showAndWait();
                 e.printStackTrace();
             }
         } else saveToFile();
@@ -40,13 +45,17 @@ public class MenuController {
             FileOutputStream outputStream = null;
             FXMLController cont = Context.getInstance().getFXMLController();
             FXMLMaterialController materialCont = Context.getInstance().getFXMLMaterialController();
-            DataForSerialization d = new DataForSerialization(new ArrayList<Order>(cont.orderList), new ArrayList<Material>(materialCont.materialList));
+            FXMLArchiveController archiveCont = Context.getInstance().getFXMLArchiveController();
+            DataForSerialization d = new DataForSerialization(new ArrayList<Order>(cont.orderList),
+                    new ArrayList<Material>(materialCont.materialList), new ArrayList<Order>(archiveCont.orderArchiveList));
             try {
                 outputStream = new FileOutputStream(file);
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                 objectOutputStream.writeObject(d);
                 objectOutputStream.close();
             } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Не удалось сохранить файл!");
+                alert.showAndWait();
                 e.printStackTrace();
             }
         }
@@ -69,18 +78,28 @@ public class MenuController {
                 fileInputStream = new FileInputStream(file);
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
                 DataForSerialization d = (DataForSerialization) objectInputStream.readObject();
+
                 FXMLController cont = Context.getInstance().getFXMLController();
                 cont.orderList.clear();
                 cont.orderList.addAll(d.getOrderList());
                 cont.histogramLoad(cont.orderList);
                 cont.tableOrder.refresh();
                 Context.getInstance().setFXMLController(cont);
+
                 FXMLMaterialController materialCont = Context.getInstance().getFXMLMaterialController();
                 materialCont.materialList.clear();
                 materialCont.materialList.addAll(d.getMaterialList());
                 materialCont.tableMaterial.refresh();
                 Context.getInstance().setFXMLMaterialController(materialCont);
+
+                FXMLArchiveController archiveCont = Context.getInstance().getFXMLArchiveController();
+                archiveCont.orderArchiveList.clear();
+                archiveCont.orderArchiveList.addAll(d.getOrderArchiveList());
+                archiveCont.tableArchiveOrder.refresh();
+                Context.getInstance().setFXMLArchiveController(archiveCont);
             } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Не удалось открыть файл!");
+                alert.showAndWait();
                 e.printStackTrace();
             }
         }

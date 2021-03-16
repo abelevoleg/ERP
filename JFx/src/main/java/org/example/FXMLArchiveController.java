@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.net.URL;
@@ -180,6 +181,10 @@ public class FXMLArchiveController implements Initializable {
     @FXML
     private void toSeeStatistic(ActionEvent actionEvent) throws ParseException {
         materialListInStatistic.clear();
+        summMaterial.setText("Итого: ");
+        summOrder.setText("Отгружено заказов: ");
+        x211113 = Color.GRAY;
+        x2111131 = Color.GREY;
 
         Date begin = Order.dateformatddMMyyyy.parse(dateAfter.getText());
         Date end = Order.dateformatddMMyyyy.parse(dateBefore.getText());

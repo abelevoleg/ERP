@@ -46,7 +46,7 @@ public class FXMLController implements Initializable {
     private MenuItem saveToFile;
 
     @FXML
-    public MenuItem open;
+    private MenuItem open;
 
     // гистограмма заказов в работе
     @FXML
@@ -160,7 +160,7 @@ public class FXMLController implements Initializable {
     private ChoiceBox<Order.StatusOfOrder> status;
 
     @FXML
-    public ChoiceBox<String> material;
+    private ChoiceBox<String> material;
 
     // области вывода номеров заказов, соответствующих столбцам гистограммы
     @FXML
@@ -627,7 +627,7 @@ public class FXMLController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        initData();
+//        initData();
         dateOrderColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("date"));
         numberOrderColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("number"));
         statusOrderColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatusText()));

@@ -11,12 +11,10 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class FXMLMaterialController implements Initializable {
     ObservableList<Material> materialList = FXCollections.observableArrayList();
@@ -29,7 +27,7 @@ public class FXMLMaterialController implements Initializable {
     private MenuItem saveToFile;
 
     @FXML
-    public MenuItem open;
+    private MenuItem open;
 
     @FXML
     TableView <Material> tableMaterial;
@@ -314,7 +312,7 @@ public class FXMLMaterialController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        initData();
+//        initData();
         nameMaterialColumn.setCellValueFactory(new PropertyValueFactory<Material, String>("name"));
         descriptionMaterialColumn.setCellValueFactory(new PropertyValueFactory<Material, String>("materialDescription"));
         quantityMaterialColumn.setCellValueFactory(new PropertyValueFactory<Material, Integer>("quantity"));

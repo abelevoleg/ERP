@@ -104,7 +104,7 @@
                         <TextField id="name" fx:id="name" layoutX="103.0" layoutY="13.0" prefHeight="31.0" prefWidth="340.0" />
                         <TextField id="quantity" fx:id="quantity" layoutX="124.0" layoutY="91.0" prefHeight="31.0" prefWidth="50.0" />
 
-                        <Button fx:id="putMaterial" disable="true" layoutX="455.0" layoutY="13.0" onAction="#putMaterial" prefHeight="31.0" prefWidth="161.0" style="-fx-background-color: lightgreen;" text="Сохранить изменения" textAlignment="CENTER" />
+                        <Button fx:id="putMaterial" disable="true" layoutX="455.0" layoutY="13.0" onAction="#putMaterial" prefHeight="31.0" prefWidth="161.0" style="-fx-background-color: lightgreen;" text="Сохранить" textAlignment="CENTER" />
                         <Button fx:id="deleteMaterial" disable="true" layoutX="455.0" layoutY="51.0" onAction="#deleteMaterial" prefHeight="31.0" prefWidth="161.0" style="-fx-background-color: red;" text="Удалить материал" textAlignment="CENTER" />
 
                          <TableView fx:id="tableMaterialLack" layoutX="1.0" layoutY="243.0" prefHeight="373.0" prefWidth="619.0" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="243.0">
@@ -132,8 +132,8 @@
                            </textFill>
                         </Label>
                         <TextField id="quantityForCheck" fx:id="quantityForCheck" layoutX="172.0" layoutY="204.0" prefHeight="31.0" prefWidth="51.0" />
-                        <Button fx:id="checkOrders" layoutX="228.0" layoutY="204.0" onAction="#checkMaterialForOrders" prefHeight="31.0" prefWidth="91.0" style="-fx-background-color: lightblue;" text="Проверить" textAlignment="CENTER" />
-                        <Label alignment="CENTER" layoutX="382.0" layoutY="206.0" prefHeight="27.0" prefWidth="82.0" style="&#10;" text="Заказ №" textAlignment="CENTER" wrapText="false">
+                        <Button fx:id="checkOrders" layoutX="228.0" layoutY="204.0" onAction="#checkMaterialForOrders" prefHeight="33.0" prefWidth="99.0" style="-fx-background-color: lightblue;" text="Проверить" textAlignment="CENTER" />
+                        <Label alignment="CENTER" layoutX="361.0" layoutY="207.0" prefHeight="27.0" prefWidth="82.0" style="&#10;" text="Заказ №" textAlignment="CENTER" wrapText="false">
                            <font>
                               <Font size="18.0" fx:id="x1111111" />
                            </font>
@@ -141,8 +141,8 @@
                               <Color blue="0.624" green="0.624" red="0.624" fx:id="x2111111" />
                            </textFill>
                         </Label>
-                        <TextField id="numberForCheck" fx:id="numberForCheck" layoutX="464.0" layoutY="204.0" prefHeight="31.0" prefWidth="60.0" />
-                        <Button fx:id="checkNumberOrder" layoutX="529.0" layoutY="204.0" onAction="#checkMaterialForNumberOrder" prefHeight="31.0" prefWidth="91.0" style="-fx-background-color: lightblue;" text="Проверить" textAlignment="CENTER" />
+                        <TextField id="numberForCheck" fx:id="numberForCheck" layoutX="444.0" layoutY="204.0" prefHeight="31.0" prefWidth="60.0" />
+                        <Button fx:id="checkNumberOrder" layoutX="509.0" layoutY="203.0" onAction="#checkMaterialForNumberOrder" prefHeight="33.0" prefWidth="99.0" style="-fx-background-color: lightblue;" text="Проверить" textAlignment="CENTER" />
 
                          <Button fx:id="enterpriseSet" layoutX="17.0" onAction="#setEnterpriseMode" prefHeight="31.0" prefWidth="125.0" style="-fx-background-color: yellow;" text="Производство" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="17.0">
                              <font>
@@ -185,7 +185,7 @@
                      <textFill>
                         <Color blue="0.624" green="0.624" red="0.624" fx:id="x21" />
                      </textFill></Label>
-                   <Button fx:id="newMaterialInBase" layoutX="13.0" layoutY="14.0" onAction="#newMaterialInBase" prefHeight="31.0" prefWidth="117.0" style="-fx-background-color: lightblue;" text="Новый материал" textAlignment="CENTER" />
+                   <Button fx:id="newMaterialInBase" layoutX="13.0" layoutY="14.0" onAction="#newMaterialInBase" prefHeight="31.0" prefWidth="117.0" style="-fx-background-color: lightblue;" text="Создать" textAlignment="CENTER" />
                    <Button fx:id="saveMaterialInBase" disable="true" layoutX="140.0" layoutY="14.0" onAction="#saveMaterialInBase" prefHeight="31.0" prefWidth="117.0" style="-fx-background-color: lightgreen;" text="Сохранить" textAlignment="CENTER" />
                   <TextField id="newName" fx:id="newName" disable="true" layoutX="107.0" layoutY="55.0" prefHeight="31.0" prefWidth="247.0" />
                   <TextField id="newMaterialDescription" fx:id="newMaterialDescription" disable="true" layoutX="107.0" layoutY="95.0" prefHeight="31.0" prefWidth="247.0" />

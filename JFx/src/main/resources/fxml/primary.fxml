@@ -150,7 +150,7 @@
                                  <TableColumn fx:id="quantityColumn" onEditCommit="#changeQuantity" prefWidth="79.0" style="-fx-alignment: CENTER;" text="м.кв." />
                              </columns>
                          </TableView>
-                        <Button fx:id="putOrder" disable="true" layoutX="9.0" layoutY="361.0" onAction="#putOrder" prefHeight="31.0" prefWidth="172.0" style="-fx-background-color: lightgreen; -fx-border-color: grey" text="Сохранить изменения" textAlignment="CENTER" />
+                        <Button fx:id="putOrder" disable="true" layoutX="9.0" layoutY="361.0" onAction="#putOrder" prefHeight="31.0" prefWidth="172.0" style="-fx-background-color: lightgreen; -fx-border-color: grey" text="Сохранить" textAlignment="CENTER" />
                         <Button fx:id="deleteOrder" disable="true" layoutX="9.0" layoutY="402.0" onAction="#deleteOrder" prefHeight="31.0" prefWidth="172.0" style="-fx-background-color: red; -fx-border-color: grey" text="Удалить заказ" textAlignment="CENTER" />
                         <BarChart id="orderInWork" fx:id="orderInWork" alternativeRowFillVisible="false" barGap="0.0" categoryGap="35.0" layoutX="337.0" layoutY="3.0" legendVisible="false" prefHeight="443.0" prefWidth="408.0" title="Заказы в производстве" verticalGridLinesVisible="false">
                           <xAxis>
@@ -164,11 +164,11 @@
                               </NumberAxis>
                           </yAxis>
                         </BarChart>
-                         <Button disable="true" layoutX="167.0" prefHeight="33.0" prefWidth="125.0" style="-fx-background-color: yellow; -fx-border-color: grey" text="Производство" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="167.0" >
+                         <Button disable="true" layoutX="167.0" prefHeight="33.0" prefWidth="125.0" style="-fx-background-color: yellow; -fx-border-color: grey" text="Производство" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="167.0">
                              <font>
                                  <Font name="System Bold" size="18.0" />
                              </font></Button>
-                         <Button fx:id="warehouse" layoutX="297.0" onAction="#setWarehouseMode" prefHeight="33.0" prefWidth="125.0" style="-fx-background-color: yellow; -fx-border-color: grey" text="Склад" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="297.0" >
+                         <Button fx:id="warehouse" layoutX="297.0" onAction="#setWarehouseMode" prefHeight="33.0" prefWidth="125.0" style="-fx-background-color: yellow; -fx-border-color: grey" text="Склад" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="297.0">
                              <font>
                                  <Font name="System Bold" size="18.0" />
                              </font></Button>

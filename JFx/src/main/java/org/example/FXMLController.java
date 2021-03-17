@@ -284,14 +284,16 @@ public class FXMLController implements Initializable {
     @FXML
     private void choiceOrder(MouseEvent event) {
         Order selectedOrder = tableOrder.getSelectionModel().getSelectedItem();
-        number.setText(selectedOrder.getNumber());
-        date.setText(selectedOrder.getDate());
-        description.setText(selectedOrder.getDescription());
-        status.setValue(selectedOrder.getStatus());
-        materialListInOrder.clear();
-        materialListInOrder.addAll(selectedOrder.getMaterialList());
-        putOrder.setDisable(false);
-        deleteOrder.setDisable(false);
+        if (selectedOrder != null) {
+            number.setText(selectedOrder.getNumber());
+            date.setText(selectedOrder.getDate());
+            description.setText(selectedOrder.getDescription());
+            status.setValue(selectedOrder.getStatus());
+            materialListInOrder.clear();
+            materialListInOrder.addAll(selectedOrder.getMaterialList());
+            putOrder.setDisable(false);
+            deleteOrder.setDisable(false);
+        }
     }
 
     // поиск заказа в таблице заказов

@@ -122,12 +122,14 @@ public class FXMLArchiveController implements Initializable {
     @FXML
     private void choiceOrder(MouseEvent event) {
         Order selectedOrder = tableArchiveOrder.getSelectionModel().getSelectedItem();
-        number.setText(selectedOrder.getNumber());
-        date.setText(selectedOrder.getDate());
-        description.setText(selectedOrder.getDescription());
-        materialListInArchiveOrder.clear();
-        materialListInArchiveOrder.addAll(selectedOrder.getMaterialList());
-        deleteOrder.setDisable(false);
+        if (selectedOrder != null) {
+            number.setText(selectedOrder.getNumber());
+            date.setText(selectedOrder.getDate());
+            description.setText(selectedOrder.getDescription());
+            materialListInArchiveOrder.clear();
+            materialListInArchiveOrder.addAll(selectedOrder.getMaterialList());
+            deleteOrder.setDisable(false);
+        }
     }
 
     // поиск заказа в таблице заказов

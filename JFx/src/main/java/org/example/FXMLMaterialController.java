@@ -63,6 +63,9 @@ public class FXMLMaterialController implements Initializable {
     private TextField quantity;
 
     @FXML
+    private TextField supplyQuantity;
+
+    @FXML
     private TextField quantityForCheck;
 
     @FXML
@@ -79,6 +82,12 @@ public class FXMLMaterialController implements Initializable {
 
     @FXML
     private Button deleteMaterial;
+
+    @FXML
+    private Button supply;
+
+    @FXML
+    private Button supplyOk;
 
     @FXML
     private Button newMaterialInBase;
@@ -104,12 +113,15 @@ public class FXMLMaterialController implements Initializable {
     @FXML
     private void choiceMaterial(MouseEvent mouseEvent) {
         Material selectedMaterial = tableMaterial.getSelectionModel().getSelectedItem();
-        name.setText(selectedMaterial.getName());
-        materialDescription.setText(selectedMaterial.getMaterialDescription());
-        quantity.setText(String.valueOf(selectedMaterial.getQuantity()));
+        if (selectedMaterial != null) {
+            name.setText(selectedMaterial.getName());
+            materialDescription.setText(selectedMaterial.getMaterialDescription());
+            quantity.setText(String.valueOf(selectedMaterial.getQuantity()));
 
-        putMaterial.setDisable(false);
-        deleteMaterial.setDisable(false);
+            putMaterial.setDisable(false);
+            deleteMaterial.setDisable(false);
+            supply.setDisable(false);
+        }
     }
 
     @FXML
@@ -133,6 +145,7 @@ public class FXMLMaterialController implements Initializable {
         quantity.clear();
         putMaterial.setDisable(true);
         deleteMaterial.setDisable(true);
+        supply.setDisable(true);
     }
 
     @FXML
@@ -243,7 +256,7 @@ public class FXMLMaterialController implements Initializable {
                     }
                 }
                 if (!haveMaterialInBase){
-                    LackMaterialData lackMaterialData = new LackMaterialData(materialName, order.getNumber(), -(int) (m.getQuantity() / FXMLController.LISTAREA + 0.75));
+                    LackMaterialData lackMaterialData = new LackMaterialData(materialName, order.getNumber(), -(int) (m.getQuantity() / FXMLController.LISTAREA + 1.0));
                     lackMaterialList.add(lackMaterialData);
                 }
             }
@@ -290,6 +303,37 @@ public class FXMLMaterialController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Материал в наличии!");
             alert.showAndWait();
         } else Collections.sort(lackMaterialList);
+    }
+
+
+    // активация полей прихода материала
+    @FXML
+    private void supplyMaterial(ActionEvent actionEvent) {
+        supplyQuantity.setDisable(false);
+        supplyOk.setDisable(false);
+    }
+
+    // добавление количества пришедшего материала в базу
+    @FXML
+    private void supplyQuantityInBase(ActionEvent actionEvent) {
+        try {
+            Integer.parseInt(supplyQuantity.getText());
+        } catch (NumberFormatException e) {
+            supplyQuantity.setStyle("-fx-text-inner-color:Red;");
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Количество листов должно быть целым числом!");
+            alert.showAndWait();
+            return;
+        }
+        Material m = tableMaterial.getSelectionModel().getSelectedItem();
+        m.setQuantity(m.getQuantity() + Integer.parseInt(supplyQuantity.getText()));
+        quantity.setText(String.valueOf(m.getQuantity()));
+        tableMaterial.refresh();
+
+        supplyQuantity.setStyle("-fx-text-inner-color:Black;");
+        supplyQuantity.clear();
+
+        supplyQuantity.setDisable(true);
+        supplyOk.setDisable(true);
     }
 
     // сохранение состояния таблиц заказов и материалов в текущий файл

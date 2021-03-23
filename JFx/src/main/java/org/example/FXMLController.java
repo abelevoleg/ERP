@@ -437,6 +437,11 @@ public class FXMLController implements Initializable {
             histogramUpdate(changedOrder, orderList.get(index));
         }
 
+        // обновление данных полей гистограммы с номерами заказов, если номер заказа изменен
+        if (!changedOrder.getNumber().equals(orderList.get(index).getNumber())) {
+            histogramUpdate(changedOrder, orderList.get(index));
+        }
+
         // сохранение измененного заказа в таблицу
         orderList.set(index, changedOrder);
 
@@ -578,7 +583,7 @@ public class FXMLController implements Initializable {
         setNumberToLabels();
     }
 
-    // установка в поля под гистограммой списка заказов
+    // установка в поля гистограммы списка заказов
     private void setNumberToLabels(){
         String ncNumber = setTextOrderNumbers(ncOrderNumbers);
         ncOrders.setText(ncNumber);

@@ -72,6 +72,10 @@ public class MenuController {
                 );
         file = fileChooser.showOpenDialog(MainApp.stage);
 
+        openFromFile(file);
+    }
+
+    static void openFromFile(File file) {
         if (file != null) {
             FileInputStream fileInputStream = null;
             try {
